@@ -1,6 +1,6 @@
 # Проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
-* Студент: [Анастасия](https://up.htmlacademy.ru/ecmascript/13/user/342107).
+* Студент: [Анастасия Карнаухова](https://up.htmlacademy.ru/ecmascript/13/user/342107).
 * Наставник: [Иван Шалагин] (https://up.htmlacademy.ru/ecmascript/13/user/386947).
 
 ---
