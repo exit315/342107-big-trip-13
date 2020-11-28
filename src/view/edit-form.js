@@ -6,7 +6,6 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
   const {
     pointType = ``,
     destination = ``,
-    offers = ``,
     dateBegin = ``,
     dateEnd = ``,
     destinationDescription = {
@@ -17,7 +16,7 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
 
   const pointTypesList = [];
 
-  EVENT_POINT_TYPES.forEach(element => {
+  EVENT_POINT_TYPES.forEach((element) => {
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${element.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}">
       <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1">${element}</label>
@@ -26,13 +25,13 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
 
   const destinationsList = [];
 
-  EVENT_POINT_DESTINATIONS.forEach(element => {
+  EVENT_POINT_DESTINATIONS.forEach((element) => {
     destinationsList.push(`<option value="${element}"></option>`);
   });
 
   const offersList = [];
 
-  ADDITIONAL_OFFERS.forEach(el => {
+  ADDITIONAL_OFFERS.forEach((el) => {
     offersList.push(`<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}-1" type="checkbox" name="event-offer-${el.type}">
     <label class="event__offer-label" for="event-offer-${el.type}-1">
@@ -56,7 +55,7 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${pointTypesList.join('')}
+            ${pointTypesList.join(``)}
           </fieldset>
         </div>
       </div>
@@ -98,13 +97,13 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          ${offersList.join('')}
+          ${offersList.join(``)}
         </div>
       </section>
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destinationDescription.text}</p>
+        <p class="event__destination-description">${destinationDescription}</p>
       </section>
     </section>
   </form>`;

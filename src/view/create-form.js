@@ -3,7 +3,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
   const pointTypesList = [];
 
-  pointTypes.forEach(element => {
+  pointTypes.forEach((element) => {
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${element.toLowerCase()}-1" class="event__type-input" type="radio" name="event-type" value="${element.toLowerCase()}">
       <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1">${element}</label>
@@ -12,13 +12,13 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
   const destinationsList = [];
 
-  destinations.forEach(element => {
+  destinations.forEach((element) => {
     destinationsList.push(`<option value="${element}"></option>`);
   });
 
   const offersList = [];
 
-  offers.forEach(element => {
+  offers.forEach((element) => {
     offersList.push(`<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${element.type}-1" type="checkbox" name="event-offer-${element.type}">
       <label class="event__offer-label" for="event-offer-${element.type}-1">
@@ -31,7 +31,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
   const photoList = [];
 
-  destinationDescription.photo.forEach(element => {
+  destinationDescription.photo.forEach((element) => {
     photoList.push(`<img class="event__photo" src="${element}" alt="Event photo">`);
   });
 
@@ -47,7 +47,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${pointTypesList.join('')}
+            ${pointTypesList.join(``)}
           </fieldset>
         </div>
       </div>
@@ -57,7 +57,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
         <datalist id="destination-list-1">
-          ${destinationsList.join('')}
+          ${destinationsList.join(``)}
         </datalist>
       </div>
 
@@ -85,7 +85,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${offersList.join('')}
+        ${offersList.join(``)}
         </div>
       </section>
 
@@ -95,7 +95,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            ${photoList.join('')}
+            ${photoList.join(``)}
           </div>
         </div>
       </section>

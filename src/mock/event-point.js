@@ -16,7 +16,7 @@ const createEventPointType = () => {
 
 const createEventPointDestination = () => {
   const randomIndex = getRandomInteger(0, EVENT_POINT_DESTINATIONS.length - 1);
-  
+
   return EVENT_POINT_DESTINATIONS[randomIndex];
 };
 
@@ -26,8 +26,8 @@ const createTextDescription = () => {
 
   for (let i = 0; i < randomCount; i++) {
     textDescription[i] = TEXT_EXAMPLES[getRandomInteger(0, TEXT_EXAMPLES.length - 1)];
-  };
-  return textDescription.join('');
+  }
+  return textDescription.join(``);
 };
 
 const createAdditionalOffer = () => {
@@ -37,8 +37,8 @@ const createAdditionalOffer = () => {
   if (offersList.length > 0) {
     for (let i = 0; i < randomCount; i++) {
       offersList[i] = ADDITIONAL_OFFERS[getRandomInteger(0, ADDITIONAL_OFFERS.length - 1)];
-    };
-  };
+    }
+  }
 
   const offersListUnic = new Set(offersList);
   return offersListUnic;
@@ -52,13 +52,13 @@ const generateDate = () => {
 };
 
 const generateDuration = (dayStart, dayEnd) => {
-  const difference = dayEnd.diff(dayStart, 'ms');
+  const difference = dayEnd.diff(dayStart, `ms`);
   const duration = moment.duration(difference);
 
   return duration;
 };
 
-const generateEventPoint  = () => {
+const generateEventPoint = () => {
   const dateBegin = generateDate();
   const dateEnd = generateDate();
 
@@ -71,11 +71,11 @@ const generateEventPoint  = () => {
     dateBegin: dayjs(dateBegin),
     dateEnd: dayjs(dateEnd),
     duration: generateDuration(dayjs(dateBegin), dayjs(dateEnd)),
-    isFavorite: Boolean(getRandomInteger(0,1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
     destinationDescription: {
       text: createTextDescription(),
       photo: `http://picsum.photos/248/152?r=${Math.random()}`
     },
     price: getRandomInteger(20, 500)
-  }
+  };
 };

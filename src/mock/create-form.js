@@ -13,9 +13,9 @@ const createTextDescription = () => {
 
   for (let i = 0; i < randomCount; i++) {
     textDescription[i] = TEXT_EXAMPLES[getRandomInteger(0, TEXT_EXAMPLES.length - 1)];
-  };
+  }
 
-  return textDescription.join('');
+  return textDescription.join(``);
 };
 
 const createPhotoDescription = () => {
@@ -25,7 +25,7 @@ const createPhotoDescription = () => {
 
   for (let i = 0; i < randomCount; i++) {
     photoDescription[i] = `http://picsum.photos/248/152?r=${Math.random()}`;
-  };
+  }
 
   return photoDescription;
 };

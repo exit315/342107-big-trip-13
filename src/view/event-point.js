@@ -1,9 +1,9 @@
-export const EventPointTemplate = (eventPoint) => {
+export const eventPointTemplate = (eventPoint) => {
   const {pointType, destination, offers, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
 
   const offersList = [];
 
-  offers.forEach(el => {
+  offers.forEach((el) => {
     offersList.push(`<li class="event__offer">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
@@ -18,14 +18,12 @@ export const EventPointTemplate = (eventPoint) => {
 
   const eventDuration = `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
   ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
-  ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`
+  ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
 
   const favorite = (isFavorite) ? ` event__favorite-btn--active` : ``;
 
-
-
   return `<div class="event">
-    <time class="event__date">${dateBegin.format("MMM DD")}</time> 
+    <time class="event__date">${dateBegin.format(`MMM DD`)}</time> 
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
     </div>
@@ -43,7 +41,7 @@ export const EventPointTemplate = (eventPoint) => {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${offersList.join('')}
+      ${offersList.join(``)}
     </ul>
     <button class="event__favorite-btn${favorite}" type="button">
       <span class="visually-hidden">Add to favorite</span>
