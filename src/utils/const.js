@@ -79,3 +79,14 @@ export const FILTERS_TYPES = [
   `future`,
   `past`
 ];
+
+export const NEW_EVENT_POINT = {
+  pointType: ``,
+  destination: ``,
+  dateBegin: ``,
+  dateEnd: ``,
+  destinationDescription: {
+    text: ``,
+    photo: ``
+  }
+};
