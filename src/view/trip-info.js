@@ -14,7 +14,7 @@ const createSummaryInfo = () => {
   </section>`;
 };
 
-export default class TripInfoView {
+export default class TripInfo {
   constructor() {
     this._element = null;
   }

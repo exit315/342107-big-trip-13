@@ -59,7 +59,7 @@ const createEventPointTemplate = (eventPoint) => {
   </li>`;
 };
 
-export default class EventPointView {
+export default class EventPoint {
   constructor(eventPoint) {
     this._eventPoint = eventPoint;
     this._element = null;

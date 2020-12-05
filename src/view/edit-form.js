@@ -102,7 +102,7 @@ const createEditEventFormTemplate = (eventPoint) => {
   </form>`;
 };
 
-export default class EditEventPointView {
+export default class EditEventPoint {
   constructor(eventPoint) {
     this._eventPoint = eventPoint;
     this._element = null;
