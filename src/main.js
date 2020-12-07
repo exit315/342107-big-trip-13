@@ -40,7 +40,7 @@ const renderEventPoint = (eventsListElement, eventItem) => {
 
   eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceCardToForm);
 
-  eventEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceCardToForm);
+  eventEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceFormToCard);
   
   eventEditComponent.getElement().addEventListener(`submit`, (evt) => {
     evt.preventDefault();
