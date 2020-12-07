@@ -1,18 +1,11 @@
 import {EVENT_POINT_TYPES} from "../utils/const.js";
 import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
 import {ADDITIONAL_OFFERS} from "../utils/const.js";
+import {createElement} from "../utils/utils.js";
+import dayjs from "dayjs";
 
-export const createEditEventFormTemplate = (eventPoint = {}) => {
-  const {
-    pointType = ``,
-    destination = ``,
-    dateBegin = ``,
-    dateEnd = ``,
-    destinationDescription = {
-      text: ``,
-      photo: ``
-    }
-  } = eventPoint;
+const createEditEventFormTemplate = (eventPoint) => {
+  const {pointType, destination, dateBegin, dateEnd, destinationDescription, price} = eventPoint;
 
   const pointTypesList = [];
 
@@ -72,18 +65,18 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateBegin}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateEnd}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
-          <span class="visually-hidden">Price</span>
+          <span class="visually-hidden">${price}</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -103,8 +96,31 @@ export const createEditEventFormTemplate = (eventPoint = {}) => {
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destinationDescription}</p>
+        <p class="event__destination-description">${destinationDescription.text}</p>
       </section>
     </section>
   </form>`;
 };
+
+export default class EditEventPoint {
+  constructor(eventPoint) {
+    this._eventPoint = eventPoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditEventFormTemplate(this._eventPoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

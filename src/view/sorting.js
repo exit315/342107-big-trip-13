@@ -1,6 +1,7 @@
 import {SORTING_TYPES} from "../utils/const.js";
+import {createElement} from "../utils/utils";
 
-export const createSortingTemplate = () => {
+const createSortingTemplate = () => {
   const sortingTypesList = [];
   SORTING_TYPES.forEach((type) => {
     return sortingTypesList.push(`<div class="trip-sort__item  trip-sort__item--${type}">
@@ -13,3 +14,25 @@ export const createSortingTemplate = () => {
     ${sortingTypesList.join(``)}
   </form>`;
 };
+
+export default class Sorting {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortingTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
