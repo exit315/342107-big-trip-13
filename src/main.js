@@ -6,7 +6,7 @@ import SortingView from "./view/sorting.js";
 import TripInfoView from "./view/trip-info.js";
 import EventsListView from "./view/events-list.js";
 import {generateEventPoint} from "./mock/event-point.js";
-import {render, RenderPosition} from "./utils/utils.js";
+import {render, RenderPosition} from "./utils/render.js";
 
 
 const headerElement = document.querySelector(`.page-header`);
