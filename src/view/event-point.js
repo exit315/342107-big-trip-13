@@ -1,4 +1,4 @@
-import {createElement} from "../utils/utils.js";
+import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
   const {pointType, destination, offers, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
@@ -59,25 +59,13 @@ const createEventPointTemplate = (eventPoint) => {
   </li>`;
 };
 
-export default class EventPoint {
+export default class EventPoint extends AbstractView {
   constructor(eventPoint) {
+    super();
     this._eventPoint = eventPoint;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventPointTemplate(this._eventPoint);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

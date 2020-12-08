@@ -1,8 +1,8 @@
 import {EVENT_POINT_TYPES} from "../utils/const.js";
 import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
 import {ADDITIONAL_OFFERS} from "../utils/const.js";
-import {createElement} from "../utils/utils.js";
 import dayjs from "dayjs";
+import AbstractView from "./abstract.js";
 
 const createEditEventFormTemplate = (eventPoint) => {
   const {pointType, destination, dateBegin, dateEnd, destinationDescription, price} = eventPoint;
@@ -102,25 +102,13 @@ const createEditEventFormTemplate = (eventPoint) => {
   </form>`;
 };
 
-export default class EditEventPoint {
+export default class EditEventPoint extends AbstractView {
   constructor(eventPoint) {
+    super();
     this._eventPoint = eventPoint;
-    this._element = null;
   }
 
   getTemplate() {
     return createEditEventFormTemplate(this._eventPoint);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
