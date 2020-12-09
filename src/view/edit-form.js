@@ -106,9 +106,30 @@ export default class EditEventPoint extends AbstractView {
   constructor(eventPoint) {
     super();
     this._eventPoint = eventPoint;
+    this._clickHandler = this._clickHandler.bind(this);
+    this._submitFormHandler = this._submitFormHandler.bind(this);
   }
 
   getTemplate() {
     return createEditEventFormTemplate(this._eventPoint);
+  }
+
+  _clickHandler() {
+    this._callback.click();
+  }
+
+  _submitFormHandler(evt) {
+    evt.preventDefault();
+    this._callback.submit();
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
+  }
+
+  setSubmitFormHandler(callback) {
+    this._callback.submit = callback;
+    this.getElement().addEventListener(`submit`, this._submitFormHandler);
   }
 }

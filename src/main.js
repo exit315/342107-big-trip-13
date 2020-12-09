@@ -7,7 +7,7 @@ import TripInfoView from "./view/trip-info.js";
 import EventsListView from "./view/events-list.js";
 import {generateEventPoint} from "./mock/event-point.js";
 import {render, RenderPosition} from "./utils/render.js";
-
+import {replace} from "./utils/utils.js";
 
 const headerElement = document.querySelector(`.page-header`);
 const siteMenuWrapper = headerElement.querySelector(`.trip-main`);
@@ -16,11 +16,11 @@ const mainElement = document.querySelector(`.page-main`);
 const mainElementContent = mainElement.querySelector(`.trip-events`);
 const EVENTS_COUNT = 20;
 
-render(siteMenuWrapper, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
-render(siteMenuControls, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-render(siteMenuControls, new FilterView().getElement(), RenderPosition.BEFOREEND);
-render(mainElementContent, new EventsListView().getElement(), RenderPosition.AFTERBEGIN);
-render(mainElementContent, new SortingView().getElement(), RenderPosition.AFTERBEGIN);
+render(siteMenuWrapper, new TripInfoView(), RenderPosition.AFTERBEGIN);
+render(siteMenuControls, new SiteMenuView(), RenderPosition.BEFOREEND);
+render(siteMenuControls, new FilterView(), RenderPosition.BEFOREEND);
+render(mainElementContent, new EventsListView(), RenderPosition.AFTERBEGIN);
+render(mainElementContent, new SortingView(), RenderPosition.AFTERBEGIN);
 
 const eventsListComponent = mainElement.querySelector(`.trip-events__list`);
 
@@ -31,21 +31,16 @@ const renderEventPoint = (eventsListElement, eventItem) => {
   const eventEditComponent = new EditEventPointView(eventItem);
 
   const replaceCardToForm = () => {
-    eventsListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
+    replace(eventEditComponent, eventComponent);
   };
 
   const replaceFormToCard = () => {
-    eventsListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
+    replace(eventComponent, eventEditComponent);
   };
 
-  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceCardToForm);
-
-  eventEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceFormToCard);
-  
-  eventEditComponent.getElement().addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
+  eventComponent.setEditClickHandler(replaceCardToForm);
+  eventEditComponent.setClickHandler(replaceFormToCard);
+  eventEditComponent.setSubmitFormHandler(replaceFormToCard);
 
   render(eventsListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 };
