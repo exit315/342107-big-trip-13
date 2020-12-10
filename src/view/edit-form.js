@@ -1,8 +1,8 @@
 import {EVENT_POINT_TYPES} from "../utils/const.js";
 import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
 import {ADDITIONAL_OFFERS} from "../utils/const.js";
-import {createElement} from "../utils/utils.js";
 import dayjs from "dayjs";
+import AbstractView from "./abstract.js";
 
 const createEditEventFormTemplate = (eventPoint) => {
   const {pointType, destination, dateBegin, dateEnd, destinationDescription, price} = eventPoint;
@@ -102,25 +102,34 @@ const createEditEventFormTemplate = (eventPoint) => {
   </form>`;
 };
 
-export default class EditEventPoint {
+export default class EditEventPoint extends AbstractView {
   constructor(eventPoint) {
+    super();
     this._eventPoint = eventPoint;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
+    this._submitFormHandler = this._submitFormHandler.bind(this);
   }
 
   getTemplate() {
     return createEditEventFormTemplate(this._eventPoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler() {
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  _submitFormHandler(evt) {
+    evt.preventDefault();
+    this._callback.submit();
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
+  }
+
+  setSubmitFormHandler(callback) {
+    this._callback.submit = callback;
+    this.getElement().addEventListener(`submit`, this._submitFormHandler);
   }
 }
