@@ -3,6 +3,7 @@ import SortingView from "../view/sorting.js";
 import NoPointsView from "../view/no-points.js";
 import PointPresenter from "./point.js";
 import {render, RenderPosition} from "../utils/render.js";
+import {updateItem} from "../utils/utils.js";
 
 export default class Trip {
   constructor(eventsListContainer) {
@@ -10,6 +11,8 @@ export default class Trip {
     this._eventsListComponent = new EventsListView(); // .trip-events__list
     this._sortingComponent = new SortingView();
     this._noPointsComponent = new NoPointsView();
+    this._pointPresenter = {};
+    this._handleEventChange = this._handleEventChange.bind(this);
   }
 
   init(eventsList) {
@@ -18,6 +21,11 @@ export default class Trip {
     render(this._eventsListContainer, this._eventsListComponent, RenderPosition.AFTERBEGIN);
 
     this._renderTripBoard();
+  }
+
+  _handleEventChange(updatedEvent) {
+    this._eventsList = updateItem(this._eventsList, updatedEvent);
+    this._pointPresenter[updatedEvent.id].init(updatedEvent);
   }
 
   _renderNoPoints() {
@@ -29,14 +37,15 @@ export default class Trip {
   }
 
   _renderPoint(eventPoint) {
-    const pointPresenter = new PointPresenter(this._eventsListComponent);
+    const pointPresenter = new PointPresenter(this._eventsListComponent, this._handleEventChange);
     pointPresenter.init(eventPoint);
+    this._pointPresenter[eventPoint.id] = pointPresenter;
   }
 
   _renderPointsList() {
     this._eventsList.forEach((eventItem) => {
       this._renderPoint(eventItem);
-    })
+    });
   }
 
   _renderTripBoard() {
