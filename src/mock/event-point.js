@@ -1,12 +1,16 @@
 import dayjs from "dayjs";
 import moment from "moment";
+import {nanoid} from '../vendor/nanoid';
 import {EVENT_POINT_TYPES} from "../utils/const.js";
 import {TEXT_EXAMPLES} from "../utils/const.js";
 import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
 import {ADDITIONAL_OFFERS} from "../utils/const.js";
 import {getRandomInteger} from "../utils/utils.js";
 
-export {generateEventPoint};
+const generateId = () => {
+  const eventPointId = nanoid();
+  return eventPointId;
+};
 
 const createEventPointType = () => {
   const randomIndex = getRandomInteger(0, EVENT_POINT_TYPES.length - 1);
@@ -58,11 +62,12 @@ const generateDuration = (dayStart, dayEnd) => {
   return duration;
 };
 
-const generateEventPoint = () => {
+export const generateEventPoint = () => {
   const dateBegin = generateDate();
   const dateEnd = generateDate();
 
   return {
+    id: generateId(),
     pointType: createEventPointType(),
     destination: createEventPointDestination(),
     offers: createAdditionalOffer(),
