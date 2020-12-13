@@ -1,13 +1,17 @@
 import EditEventPointView from "../view/edit-form.js";
 import EventPointView from "../view/event-point.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {Mode} from "../utils/const.js";
 
 export default class Point {
-  constructor(eventsListComponent, changeData) {
+  constructor(eventsListComponent, changeData, changeMode) {
     this._eventsListComponent = eventsListComponent;
+    this._changeData = changeData;
+    this._changeMode = changeMode;
+
     this._eventComponent = null;
     this._eventEditComponent = null;
-    this._changeData = changeData;
+    this._mode = Mode.DEFAULT;
 
     this._clickHandler = this._clickHandler.bind(this);
     this._submitFormHandler = this._submitFormHandler.bind(this);
@@ -33,11 +37,11 @@ export default class Point {
       return;
     }
 
-    if (this._eventsListComponent.getElement().contains(prevEventComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._eventComponent, prevEventComponent);
     }
 
-    if (this._eventsListComponent.getElement().contains(prevEventEditComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._eventEditComponent, prevEventEditComponent);
     }
 
@@ -50,12 +54,21 @@ export default class Point {
     remove(this._eventEditComponent);
   }
 
+  resetEventPointView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
+  }
+
   _replaceCardToForm() {
     replace(this._eventEditComponent, this._eventComponent);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._eventComponent, this._eventEditComponent);
+    this._mode = Mode.DEFAULT;
   }
 
   _clickHandler() {
