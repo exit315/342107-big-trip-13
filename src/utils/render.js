@@ -27,3 +27,30 @@ export const render = (container, element, place) => {
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
+
+export const replace = (newChild, oldChild) => {
+  if (newChild instanceof Abstract) {
+    newChild = newChild.getElement();
+  }
+
+  if (oldChild instanceof Abstract) {
+    oldChild = oldChild.getElement();
+  }
+
+  const parent = oldChild.parentElement;
+
+  if (newChild === null || oldChild === null || parent === null) {
+    throw new Error(`Can't replace - elements don't exist`);
+  }
+
+  parent.replaceChild(newChild, oldChild);
+};
+
+export const remove = (component) => {
+  if (!(component instanceof Abstract)) {
+    throw new Error(`Can remove only components`);
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+};

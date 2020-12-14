@@ -120,7 +120,7 @@ export default class EditEventPoint extends AbstractView {
 
   _submitFormHandler(evt) {
     evt.preventDefault();
-    this._callback.submit();
+    this._callback.submit(this._eventPoint);
   }
 
   setClickHandler(callback) {

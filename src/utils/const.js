@@ -90,3 +90,8 @@ export const NEW_EVENT_POINT = {
     photo: ``
   }
 };
+
+export const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`
+};
