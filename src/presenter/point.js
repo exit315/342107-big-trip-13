@@ -17,6 +17,7 @@ export default class Point {
     this._submitFormHandler = this._submitFormHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._escDownHandler = this._escDownHandler.bind(this);
   }
 
   init(eventPoint) {
@@ -62,12 +63,14 @@ export default class Point {
 
   _replaceCardToForm() {
     replace(this._eventEditComponent, this._eventComponent);
+    document.addEventListener(`keydown`, this._escDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._eventComponent, this._eventEditComponent);
+    document.removeEventListener(`keydown`, this._escDownHandler);
     this._mode = Mode.DEFAULT;
   }
 
@@ -77,6 +80,13 @@ export default class Point {
 
   _editClickHandler() {
     this._replaceCardToForm();
+  }
+
+  _escDownHandler(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      this._replaceFormToCard();
+    }
   }
 
   _favoriteClickHandler() {
