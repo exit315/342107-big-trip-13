@@ -1,11 +1,11 @@
 import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
-  const {pointType, destination, offers, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
+  const {pointType, destination, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
 
   const offersList = [];
 
-  offers.forEach((el) => {
+  pointType.offers.forEach((el) => {
     offersList.push(`<li class="event__offer">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
@@ -30,7 +30,7 @@ const createEventPointTemplate = (eventPoint) => {
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${pointType} ${destination}</h3>
+      <h3 class="event__title">${pointType.typeOfPoint} ${destination}</h3>
       <div class="event__schedule">
         <p class="event__time">
           <time class="event__start-time">${timeBegin}</time>

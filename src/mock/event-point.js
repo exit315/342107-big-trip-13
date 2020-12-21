@@ -1,10 +1,11 @@
 import dayjs from "dayjs";
 import moment from "moment";
 import {nanoid} from '../vendor/nanoid';
-import {EVENT_POINT_TYPES} from "../utils/const.js";
 import {TEXT_EXAMPLES} from "../utils/const.js";
 import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
-import {ADDITIONAL_OFFERS} from "../utils/const.js";
+/* import {ADDITIONAL_OFFERS} from "../utils/const.js";*/
+/* import {POINT_TYPES} from "../utils/const.js";*/
+import {POINTS} from "../utils/const.js";
 import {getRandomInteger} from "../utils/utils.js";
 
 const generateId = () => {
@@ -12,11 +13,37 @@ const generateId = () => {
   return eventPointId;
 };
 
-const createEventPointType = () => {
-  const randomIndex = getRandomInteger(0, EVENT_POINT_TYPES.length - 1);
+/*
+const createAdditionalOffer = () => {
+  const randomCount = getRandomInteger(0, 5);
+  const offersList = new Array(randomCount).fill();
 
-  return EVENT_POINT_TYPES[randomIndex];
+  if (offersList.length > 0) {
+    for (let i = 0; i < randomCount; i++) {
+      offersList[i] = ADDITIONAL_OFFERS[getRandomInteger(0, ADDITIONAL_OFFERS.length - 1)];
+    }
+  }
+  const offersListUnic = new Set(offersList);
+  return offersListUnic;
 };
+
+const createEventPointType = () => {
+  const randomIndex = getRandomInteger(0, POINT_TYPES.length - 1);
+
+  const eventPointType = {
+    typeOfPoint: POINT_TYPES[randomIndex],
+    offers: createAdditionalOffer()
+  }
+
+  return eventPointType;
+};
+*/
+
+const createEventPointType = () => {
+  const randomIndex = getRandomInteger(0, POINTS.length - 1);
+  return POINTS[randomIndex];
+};
+
 
 const createEventPointDestination = () => {
   const randomIndex = getRandomInteger(0, EVENT_POINT_DESTINATIONS.length - 1);
@@ -34,18 +61,16 @@ const createTextDescription = () => {
   return textDescription.join(``);
 };
 
-const createAdditionalOffer = () => {
-  const randomCount = getRandomInteger(0, 5);
-  const offersList = new Array(randomCount).fill();
+const createPhotoDescription = () => {
+  const randomCount = getRandomInteger(1, 5);
 
-  if (offersList.length > 0) {
-    for (let i = 0; i < randomCount; i++) {
-      offersList[i] = ADDITIONAL_OFFERS[getRandomInteger(0, ADDITIONAL_OFFERS.length - 1)];
-    }
+  const photoDescription = new Array(randomCount).fill();
+
+  for (let i = 0; i < randomCount; i++) {
+    photoDescription[i] = `http://picsum.photos/248/152?r=${Math.random()}`;
   }
 
-  const offersListUnic = new Set(offersList);
-  return offersListUnic;
+  return photoDescription;
 };
 
 const generateDate = () => {
@@ -70,7 +95,6 @@ export const generateEventPoint = () => {
     id: generateId(),
     pointType: createEventPointType(),
     destination: createEventPointDestination(),
-    offers: createAdditionalOffer(),
     timeBegin: dayjs(dateBegin).format(`H:M`),
     timeEnd: dayjs(dateEnd).format(`H:M`),
     dateBegin: dayjs(dateBegin),
@@ -79,7 +103,7 @@ export const generateEventPoint = () => {
     isFavorite: Boolean(getRandomInteger(0, 1)),
     destinationDescription: {
       text: createTextDescription(),
-      photo: `http://picsum.photos/248/152?r=${Math.random()}`
+      photo: createPhotoDescription()
     },
     price: getRandomInteger(20, 500)
   };

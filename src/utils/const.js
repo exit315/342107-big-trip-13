@@ -1,4 +1,4 @@
-export const EVENT_POINT_TYPES = [
+export const POINT_TYPES = [
   `Check-in`,
   `Sightseeing`,
   `Restaurant`,
@@ -9,6 +9,239 @@ export const EVENT_POINT_TYPES = [
   `Transport`,
   `Drive`,
   `Flight`
+];
+
+export const POINTS = [
+  {
+    typeOfPoint: `Check-in`,
+    offers: [
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `train`,
+        title: `Travel by train`,
+        price: `40`
+      }
+    ]
+  },
+  {
+    typeOfPoint: `Sightseeing`,
+    offers: [
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `train`,
+        title: `Travel by train`,
+        price: `40`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Restaurant`,
+    offers: [
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Taxi`,
+    offers: [
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Bus`,
+    offers: [
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Train`,
+    offers: [
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Ship`,
+    offers: [
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Transport`,
+    offers: [
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `train`,
+        title: `Travel by train`,
+        price: `40`
+      }
+    ]
+  },
+  {
+    typeOfPoint: `Drive`,
+    offers: [
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `train`,
+        title: `Travel by train`,
+        price: `40`
+      },
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  },
+  {
+    typeOfPoint: `Flight`,
+    offers: [
+      {
+        type: `meal`,
+        title: `Add meal`,
+        price: `15`
+      },
+      {
+        type: `seats`,
+        title: `Choose seats`,
+        price: `5`
+      },
+      {
+        type: `luggage`,
+        title: `Add luggage`,
+        price: `30`
+      },
+      {
+        type: `comfort`,
+        title: `Switch to comfort class`,
+        price: `100`
+      },
+    ]
+  }
 ];
 
 export const EVENT_POINT_DESTINATIONS = [
