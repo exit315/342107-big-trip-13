@@ -18,27 +18,32 @@ export const POINTS = [
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: true
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: false
       },
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: true
       },
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: false
       },
       {
         type: `train`,
         title: `Travel by train`,
-        price: `40`
+        price: `40`,
+        isChecked: true
       }
     ]
   },
@@ -48,12 +53,14 @@ export const POINTS = [
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: true
       },
       {
         type: `train`,
         title: `Travel by train`,
-        price: `40`
+        price: `40`,
+        isChecked: false
       },
     ]
   },
@@ -63,12 +70,14 @@ export const POINTS = [
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: true
       },
     ]
   },
@@ -78,17 +87,20 @@ export const POINTS = [
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: false
       },
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: true
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: false
       },
     ]
   },
@@ -98,17 +110,20 @@ export const POINTS = [
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: true
       },
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: true
       },
     ]
   },
@@ -118,22 +133,26 @@ export const POINTS = [
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: true
       },
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: true
       },
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: false
       },
     ]
   },
@@ -143,22 +162,26 @@ export const POINTS = [
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: false
       },
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: false
       },
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: true
       },
     ]
   },
@@ -168,27 +191,32 @@ export const POINTS = [
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: true
       },
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: true
       },
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: true
       },
       {
         type: `train`,
         title: `Travel by train`,
-        price: `40`
+        price: `40`,
+        isChecked: false
       }
     ]
   },
@@ -198,22 +226,26 @@ export const POINTS = [
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: true
       },
       {
         type: `train`,
         title: `Travel by train`,
-        price: `40`
+        price: `40`,
+        isChecked: false
       },
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: true
       },
     ]
   },
@@ -223,22 +255,26 @@ export const POINTS = [
       {
         type: `meal`,
         title: `Add meal`,
-        price: `15`
+        price: `15`,
+        isChecked: true
       },
       {
         type: `seats`,
         title: `Choose seats`,
-        price: `5`
+        price: `5`,
+        isChecked: false
       },
       {
         type: `luggage`,
         title: `Add luggage`,
-        price: `30`
+        price: `30`,
+        isChecked: false
       },
       {
         type: `comfort`,
         title: `Switch to comfort class`,
-        price: `100`
+        price: `100`,
+        isChecked: false
       },
     ]
   }

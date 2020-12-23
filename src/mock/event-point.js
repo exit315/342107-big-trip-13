@@ -44,33 +44,27 @@ const createEventPointType = () => {
   return POINTS[randomIndex];
 };
 
-
 const createEventPointDestination = () => {
   const randomIndex = getRandomInteger(0, EVENT_POINT_DESTINATIONS.length - 1);
-
-  return EVENT_POINT_DESTINATIONS[randomIndex];
-};
-
-const createTextDescription = () => {
   const randomCount = getRandomInteger(1, 5);
-  const textDescription = new Array(randomCount).fill();
 
+  const textDescription = new Array(randomCount).fill();
   for (let i = 0; i < randomCount; i++) {
     textDescription[i] = TEXT_EXAMPLES[getRandomInteger(0, TEXT_EXAMPLES.length - 1)];
   }
-  return textDescription.join(``);
-};
 
-const createPhotoDescription = () => {
-  const randomCount = getRandomInteger(1, 5);
-
-  const photoDescription = new Array(randomCount).fill();
-
+  const photosDescription = new Array(randomCount).fill();
   for (let i = 0; i < randomCount; i++) {
-    photoDescription[i] = `http://picsum.photos/248/152?r=${Math.random()}`;
+    photosDescription[i] = `http://picsum.photos/248/152?r=${Math.random()}`;
   }
 
-  return photoDescription;
+  const destination = {
+    title: EVENT_POINT_DESTINATIONS[randomIndex],
+    description: textDescription.join(``),
+    photos: photosDescription
+  };
+
+  return destination;
 };
 
 const generateDate = () => {
@@ -101,10 +95,6 @@ export const generateEventPoint = () => {
     dateEnd: dayjs(dateEnd),
     duration: generateDuration(dayjs(dateBegin), dayjs(dateEnd)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    destinationDescription: {
-      text: createTextDescription(),
-      photo: createPhotoDescription()
-    },
-    price: getRandomInteger(20, 500)
+    price: getRandomInteger(20, 500),
   };
 };

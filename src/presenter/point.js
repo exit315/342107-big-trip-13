@@ -101,8 +101,8 @@ export default class Point {
     );
   }
 
-  _submitFormHandler() {
-    this._changeData(this._eventPoint);
+  _submitFormHandler(eventPoint) {
+    this._changeData(eventPoint);
     this._replaceFormToCard();
   }
 }

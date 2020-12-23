@@ -16,7 +16,7 @@ const NEW_EVENT_POINT = {
 };
 
 const createEditEventFormTemplate = (data) => {
-  const {pointType, destination, dateBegin, dateEnd, destinationDescription, price} = data;
+  const {pointType, destination, dateBegin, dateEnd, price} = data;
 
   /*
   const pointTypesList = [];
@@ -44,7 +44,7 @@ const createEditEventFormTemplate = (data) => {
   const offersList = [];
   pointType.offers.forEach((el) => {
     offersList.push(`<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" ${el.isChecked ? `checked` : ``}>
     <label class="event__offer-label" for="event-offer-${el.type}">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
@@ -56,7 +56,7 @@ const createEditEventFormTemplate = (data) => {
 
   const photoList = [];
 
-  destinationDescription.photo.forEach((element) => {
+  destination.photos.forEach((element) => {
     photoList.push(`<img class="event__photo" src="${element}" alt="Event photo">`);
   });
 
@@ -65,7 +65,7 @@ const createEditEventFormTemplate = (data) => {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${pointType.typeOfPoint}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle" type="checkbox">
 
@@ -81,7 +81,7 @@ const createEditEventFormTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination">
           ${pointType.typeOfPoint}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination" type="text" name="event-destination" value="${destination}" list="destination-list">
+        <input class="event__input  event__input--destination" id="event-destination" type="text" name="event-destination" value="${destination.title}" list="destination-list">
         <datalist id="destination-list">
         ${destinationsList.join(``)}
         </datalist>
@@ -120,7 +120,7 @@ const createEditEventFormTemplate = (data) => {
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destinationDescription.text}</p>
+        <p class="event__destination-description">${destination.description}</p>
         <div class="event__photos-container">
           <div class="event__photos-tape">
             ${photoList.join(``)}
@@ -162,6 +162,7 @@ export default class EditEventPoint extends SmartView {
     evt.preventDefault();
 
     let i = POINTS.findIndex((el) => el.typeOfPoint.toLowerCase() === evt.target.value);
+    POINTS[i].offers.forEach((el) => (el.isChecked = false));
 
     this.updateData({
       pointType: Object.assign(
