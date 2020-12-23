@@ -144,6 +144,12 @@ export default class EditEventPoint extends SmartView {
     this._setInnerHandlers();
   }
 
+  reset(eventPoint) {
+    this.updateData(
+        EditEventPoint.parseEventToData(eventPoint)
+    );
+  }
+
   getTemplate() {
     return createEditEventFormTemplate(this._data);
   }
@@ -206,7 +212,7 @@ export default class EditEventPoint extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
 
-    this.setClickHandler(this._callback.submit);
+    this.setClickHandler(this._callback.click);
     this.setSubmitFormHandler(this._callback.submit);
   }
 

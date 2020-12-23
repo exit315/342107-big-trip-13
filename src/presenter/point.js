@@ -75,6 +75,7 @@ export default class Point {
   }
 
   _clickHandler() {
+    this._eventEditComponent.reset(this._eventPoint);
     this._replaceFormToCard();
   }
 
@@ -85,6 +86,7 @@ export default class Point {
   _escDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._eventEditComponent.reset(this._eventPoint);
       this._replaceFormToCard();
     }
   }
