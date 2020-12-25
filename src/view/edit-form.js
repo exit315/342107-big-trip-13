@@ -1,4 +1,6 @@
-import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
+import {DESTINATIONS} from "../utils/const.js";
+import {DESTINATION_TYPES} from "../utils/const.js";
+
 /* import {POINT_TYPES} from "../utils/const.js";*/
 import {POINTS} from "../utils/const.js";
 import dayjs from "dayjs";
@@ -29,36 +31,61 @@ const createEditEventFormTemplate = (data) => {
   */
 
   const pointTypesList = [];
-  POINTS.forEach((element) => {
+  POINTS.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
-      <input id="event-type-${element.typeOfPoint.toLowerCase()}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${element.typeOfPoint.toLowerCase()}">
-      <label class="event__type-label  event__type-label--${element.typeOfPoint.toLowerCase()}" for="event-type-${element.typeOfPoint.toLowerCase()}">${element.typeOfPoint}</label>
+      <input id="event-type-${el.typeOfPoint.toLowerCase()}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.typeOfPoint.toLowerCase()}">
+      <label class="event__type-label  event__type-label--${el.typeOfPoint.toLowerCase()}" for="event-type-${el.typeOfPoint.toLowerCase()}">${el.typeOfPoint}</label>
     </div>`);
   });
 
   const destinationsList = [];
-  EVENT_POINT_DESTINATIONS.forEach((element) => {
-    destinationsList.push(`<option value="${element}"></option>`);
+  DESTINATION_TYPES.forEach((el) => {
+    destinationsList.push(`<option value="${el}"></option>`);
   });
 
   const offersList = [];
   pointType.offers.forEach((el) => {
     offersList.push(`<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" ${el.isChecked ? `checked` : ``}>
-    <label class="event__offer-label" for="event-offer-${el.type}">
-      <span class="event__offer-title">${el.title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${el.price}</span>
-    </label>
-  </div>`);
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" ${el.isChecked ? `checked` : ``}>
+      <label class="event__offer-label" for="event-offer-${el.type}">
+        <span class="event__offer-title">${el.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${el.price}</span>
+      </label>
+    </div>`);
     return offersList;
   });
 
-  const photoList = [];
 
-  destination.photos.forEach((element) => {
-    photoList.push(`<img class="event__photo" src="${element}" alt="Event photo">`);
-  });
+  const createPointDestinationDescriptionTemplate = (destination) => {
+    const photosList = [];
+
+    if (destination.photos !== null && destination.description !== null) {
+      destination.photos.forEach((el) => {
+        photosList.push(`<img class="event__photo" src="${el}" alt="Event photo">`);
+      });
+  
+      return `<section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${destination.description}</p>
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${photosList.join(``)}
+          </div>
+        </div>
+      </section>`
+    } else {
+      return ``;
+    }
+  };
+
+  const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
+
+
+
+
+
+
 
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -117,16 +144,7 @@ const createEditEventFormTemplate = (data) => {
           ${offersList.join(``)}
         </div>
       </section>
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destination.description}</p>
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-            ${photoList.join(``)}
-          </div>
-        </div>
-      </section>
+      ${pointDestinationDescriptionTemplate}
     </section>
   </form>`;
 };
@@ -140,7 +158,8 @@ export default class EditEventPoint extends SmartView {
 
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
-
+    this._changePointOffersHandler = this._changePointOffersHandler.bind(this);
+    
     this._setInnerHandlers();
   }
 
@@ -162,6 +181,10 @@ export default class EditEventPoint extends SmartView {
     this.getElement()
     .querySelectorAll(`.event__input--destination`)
     .forEach((el) => el.addEventListener(`change`, this._changePointDestinationHandler));
+
+    this.getElement()
+    .querySelectorAll(`.event__offer-checkbox`)
+    .forEach((el) => el.addEventListener(`change`, this._changePointOffersHandler));
   }
 
   _changePointTypeHandler(evt) {
@@ -182,8 +205,26 @@ export default class EditEventPoint extends SmartView {
   _changePointDestinationHandler(evt) {
     evt.preventDefault();
 
+    let i = DESTINATIONS.findIndex((el) => el.title === evt.target.value);
+
     this.updateData({
-      destination: evt.target.value,
+      destination: Object.assign(
+          {},
+          {title: evt.target.value},
+          {description: DESTINATIONS[i].description},
+          {photos: DESTINATIONS[i].photos}
+      )
+    });
+  }
+
+  _changePointOffersHandler(evt) {
+    evt.preventDefault();
+
+    this.updateData({
+      pointType: Object.assign(
+          {},
+          
+      )
     });
   }
 

@@ -1,17 +1,12 @@
 import dayjs from "dayjs";
 import moment from "moment";
 import {nanoid} from '../vendor/nanoid';
-import {TEXT_EXAMPLES} from "../utils/const.js";
-import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
+/*import {TEXT_EXAMPLES} from "../utils/const.js";*/
+import {DESTINATIONS} from "../utils/const.js";
 /* import {ADDITIONAL_OFFERS} from "../utils/const.js";*/
 /* import {POINT_TYPES} from "../utils/const.js";*/
 import {POINTS} from "../utils/const.js";
 import {getRandomInteger} from "../utils/utils.js";
-
-const generateId = () => {
-  const eventPointId = nanoid();
-  return eventPointId;
-};
 
 /*
 const createAdditionalOffer = () => {
@@ -38,14 +33,9 @@ const createEventPointType = () => {
   return eventPointType;
 };
 */
-
-const createEventPointType = () => {
-  const randomIndex = getRandomInteger(0, POINTS.length - 1);
-  return POINTS[randomIndex];
-};
-
+/*
 const createEventPointDestination = () => {
-  const randomIndex = getRandomInteger(0, EVENT_POINT_DESTINATIONS.length - 1);
+  const randomIndex = getRandomInteger(0, DESTINATIONS.length - 1);
   const randomCount = getRandomInteger(1, 5);
 
   const textDescription = new Array(randomCount).fill();
@@ -59,12 +49,28 @@ const createEventPointDestination = () => {
   }
 
   const destination = {
-    title: EVENT_POINT_DESTINATIONS[randomIndex],
+    title: DESTINATIONS[randomIndex],
     description: textDescription.join(``),
     photos: photosDescription
   };
 
   return destination;
+};
+*/
+
+const generateId = () => {
+  const eventPointId = nanoid();
+  return eventPointId;
+};
+
+const createEventPointType = () => {
+  const randomIndex = getRandomInteger(0, POINTS.length - 1);
+  return POINTS[randomIndex];
+};
+
+const createEventPointDestination = () => {
+  const randomIndex = getRandomInteger(0, POINTS.length - 1);
+  return DESTINATIONS[randomIndex];
 };
 
 const generateDate = () => {

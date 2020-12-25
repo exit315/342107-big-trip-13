@@ -280,7 +280,7 @@ export const POINTS = [
   }
 ];
 
-export const EVENT_POINT_DESTINATIONS = [
+export const DESTINATION_TYPES = [
   `Liverpool`,
   `London`,
   `Amsterdam`,
@@ -292,6 +292,60 @@ export const EVENT_POINT_DESTINATIONS = [
   `Oslo`,
   `Reykjavík`
 ];
+
+
+export const DESTINATIONS = [
+  {
+    title: `Liverpool`,
+    description: null,
+    photos: null
+  },
+  {
+    title: `London`,
+    description: `Fusce tristique felis at fermentum pharetra. Sed sed nisi sed augue convallis suscipit in sed felis.`,
+    photos: [`http://picsum.photos/248/152?r=0.2287009170143086`, `http://picsum.photos/248/152?r=0.9391460172237087`, `http://picsum.photos/248/152?r=0.9233381928506377`, `http://picsum.photos/248/152?r=0.7544853524628241`]
+  },
+  {
+    title: `Amsterdam`,
+    description: `Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Cras aliquet varius magna, non porta ligula feugiat eget. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+    photos: [`http://picsum.photos/248/152?r=0.9391460172237087`, `http://picsum.photos/248/152?r=0.9233381928506377`, `http://picsum.photos/248/152?r=0.7544853524628241`, `http://picsum.photos/248/152?r=0.2287009170143086`]
+  },
+  {
+    title: `Stavanger`,
+    description: `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Cras aliquet varius magna, non porta ligula feugiat eget.`,
+    photos: [`http://picsum.photos/248/152?r=0.6516305937077944`, `http://picsum.photos/248/152?r=0.9233381928506377`, `http://picsum.photos/248/152?r=0.9233381928506377`, `http://picsum.photos/248/152?r=0.7544853524628241`]
+  },
+  {
+    title: `Trondheim`,
+    description: `Fusce tristique felis at fermentum pharetra. Aliquam erat volutpat. In rutrum ac purus sit amet tempus. Aliquam erat volutpat.`,
+    photos: [`http://picsum.photos/248/152?r=0.9233381928506377`, `http://picsum.photos/248/152?r=0.7544853524628241`, `http://picsum.photos/248/152?r=0.6516305937077944`, `http://picsum.photos/248/152?r=0.017151217508655225`]
+  },
+  {
+    title: `Brugge`,
+    description: `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+    photos: [`http://picsum.photos/248/152?r=0.9607347539991706`, `http://picsum.photos/248/152?r=0.7544853524628241`, `http://picsum.photos/248/152?r=0.6516305937077944`]
+  },
+  {
+    title: `Praha`,
+    description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tristique felis at fermentum pharetra. In rutrum ac purus sit amet tempus.`,
+    photos: [`http://picsum.photos/248/152?r=0.9607347539991706`, `http://picsum.photos/248/152?r=0.012181689225933656`, `http://picsum.photos/248/152?r=0.6516305937077944`]
+  },
+  {
+    title: `Lisboa`,
+    description: null,
+    photos: null
+  },
+  {
+    title: `Oslo`,
+    description: `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus. Cras aliquet varius magna, non porta ligula feugiat eget. Sed sed nisi sed augue convallis suscipit in sed felis. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+    photos: [`http://picsum.photos/248/152?r=0.017151217508655225`, `http://picsum.photos/248/152?r=0.8551107985546689`, `http://picsum.photos/248/152?r=0.6516305937077944`]
+  },
+  {
+    title: `Reykjavík`,
+    description: null,
+    photos: null
+  }
+]
 
 export const TEXT_EXAMPLES = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. `,
