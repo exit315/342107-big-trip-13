@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import moment from "moment";
 import {nanoid} from '../vendor/nanoid';
-/*import {TEXT_EXAMPLES} from "../utils/const.js";*/
+/* import {TEXT_EXAMPLES} from "../utils/const.js";*/
 import {DESTINATIONS} from "../utils/const.js";
 /* import {ADDITIONAL_OFFERS} from "../utils/const.js";*/
 /* import {POINT_TYPES} from "../utils/const.js";*/

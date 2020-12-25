@@ -345,7 +345,7 @@ export const DESTINATIONS = [
     description: null,
     photos: null
   }
-]
+];
 
 export const TEXT_EXAMPLES = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. `,
