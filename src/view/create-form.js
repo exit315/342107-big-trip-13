@@ -1,9 +1,11 @@
+import {EVENT_POINT_DESTINATIONS} from "../utils/const.js";
+
 export const createEventFormTemplate = (eventPoint = {}) => {
-  const {pointTypes, destinations, offers, destinationDescription} = eventPoint;
+  const {pointType, destination, offers} = eventPoint;
 
   const pointTypesList = [];
 
-  pointTypes.forEach((element) => {
+  pointType.forEach((element) => {
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${element.toLowerCase()}-1" class="event__type-input" type="radio" name="event-type" value="${element.toLowerCase()}">
       <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1">${element}</label>
@@ -12,7 +14,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
   const destinationsList = [];
 
-  destinations.forEach((element) => {
+  EVENT_POINT_DESTINATIONS.forEach((element) => {
     destinationsList.push(`<option value="${element}"></option>`);
   });
 
@@ -31,7 +33,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
   const photoList = [];
 
-  destinationDescription.photo.forEach((element) => {
+  destination.photos.forEach((element) => {
     photoList.push(`<img class="event__photo" src="${element}" alt="Event photo">`);
   });
 
@@ -40,7 +42,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${pointType.typeOfPoint}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -91,7 +93,7 @@ export const createEventFormTemplate = (eventPoint = {}) => {
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destinationDescription.text}</p>
+        <p class="event__destination-description">${destination.description}</p>
 
         <div class="event__photos-container">
           <div class="event__photos-tape">

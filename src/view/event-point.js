@@ -1,18 +1,20 @@
 import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
-  const {pointType, destination, offers, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
+  const {pointType, destination, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
 
   const offersList = [];
 
-  offers.forEach((el) => {
-    offersList.push(`<li class="event__offer">
+  if (pointType.offers !== null) {
+    pointType.offers.forEach((el) => {
+      offersList.push(`${el.isChecked ? `<li class="event__offer">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${el.price}</span>
-    </li>`);
-    return offersList;
-  });
+    </li>` : ``}`);
+      return offersList;
+    });
+  }
 
   const days = duration._data.days;
   const hours = duration._data.hours;
@@ -28,9 +30,9 @@ const createEventPointTemplate = (eventPoint) => {
     <div class="event">
       <time class="event__date">${dateBegin.format(`MMM DD`)}</time> 
       <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+        <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType.typeOfPoint}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${pointType} ${destination}</h3>
+      <h3 class="event__title">${pointType.typeOfPoint} ${destination.title}</h3>
       <div class="event__schedule">
         <p class="event__time">
           <time class="event__start-time">${timeBegin}</time>
