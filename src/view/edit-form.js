@@ -29,6 +29,21 @@ const createEditEventFormTemplate = (data) => {
   });
   */
 
+  /*
+  const offersList = [];
+  pointType.offers.forEach((el) => {
+    offersList.push(`<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" data-type="${el.type}" ${el.isChecked ? `checked` : ``}>
+      <label class="event__offer-label" for="event-offer-${el.type}">
+        <span class="event__offer-title">${el.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${el.price}</span>
+      </label>
+    </div>`);
+    return offersList;
+  });
+  */
+
   const pointTypesList = [];
   POINTS.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
@@ -42,19 +57,32 @@ const createEditEventFormTemplate = (data) => {
     destinationsList.push(`<option value="${el}"></option>`);
   });
 
-  const offersList = [];
-  pointType.offers.forEach((el) => {
-    offersList.push(`<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" data-type="${el.type}" ${el.isChecked ? `checked` : ``}>
-      <label class="event__offer-label" for="event-offer-${el.type}">
-        <span class="event__offer-title">${el.title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${el.price}</span>
-      </label>
-    </div>`);
-    return offersList;
-  });
 
+  const createPointOffersTemplate = () => {
+    const offersList = [];
+
+    if (pointType.offers !== null) {
+      pointType.offers.forEach((el) => {
+        offersList.push(`<div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" data-type="${el.type}" ${el.isChecked ? `checked` : ``}>
+          <label class="event__offer-label" for="event-offer-${el.type}">
+            <span class="event__offer-title">${el.title}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${el.price}</span>
+          </label>
+        </div>`);
+      });
+
+      return `<section class="event__section  event__section--offers">
+          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+          <div class="event__available-offers">
+            ${offersList}
+          </div>
+        </section>`;
+    } else {
+      return ``;
+    }
+  };
 
   const createPointDestinationDescriptionTemplate = () => {
     const photosList = [];
@@ -78,7 +106,9 @@ const createEditEventFormTemplate = (data) => {
     }
   };
 
+  const pointOffersTemplate = createPointOffersTemplate(pointType);
   const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
+
 
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -130,13 +160,7 @@ const createEditEventFormTemplate = (data) => {
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        <div class="event__available-offers">
-          ${offersList.join(``)}
-        </div>
-      </section>
+      ${pointOffersTemplate}
       ${pointDestinationDescriptionTemplate}
     </section>
   </form>`;
@@ -189,7 +213,10 @@ export default class EditEventPoint extends SmartView {
     evt.preventDefault();
 
     let i = POINTS.findIndex((el) => el.typeOfPoint.toLowerCase() === evt.target.value);
-    POINTS[i].offers.forEach((el) => (el.isChecked = false));
+
+    if (POINTS[i].offers !== null) {
+      POINTS[i].offers.forEach((el) => (el.isChecked = false));
+    }
 
     this.updateData({
       pointType: Object.assign(
@@ -231,6 +258,7 @@ export default class EditEventPoint extends SmartView {
           {offers: this._data.pointType.offers}
       )
     });
+
   }
 
   _changePointPriceHandler(evt) {

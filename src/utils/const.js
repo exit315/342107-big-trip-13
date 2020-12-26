@@ -14,38 +14,7 @@ export const POINT_TYPES = [
 export const POINTS = [
   {
     typeOfPoint: `Check-in`,
-    offers: [
-      {
-        type: `luggage`,
-        title: `Add luggage`,
-        price: `30`,
-        isChecked: true
-      },
-      {
-        type: `comfort`,
-        title: `Switch to comfort class`,
-        price: `100`,
-        isChecked: false
-      },
-      {
-        type: `meal`,
-        title: `Add meal`,
-        price: `15`,
-        isChecked: true
-      },
-      {
-        type: `seats`,
-        title: `Choose seats`,
-        price: `5`,
-        isChecked: false
-      },
-      {
-        type: `train`,
-        title: `Travel by train`,
-        price: `40`,
-        isChecked: true
-      }
-    ]
+    offers: null
   },
   {
     typeOfPoint: `Sightseeing`,

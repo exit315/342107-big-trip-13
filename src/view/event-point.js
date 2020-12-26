@@ -5,14 +5,16 @@ const createEventPointTemplate = (eventPoint) => {
 
   const offersList = [];
 
-  pointType.offers.forEach((el) => {
-    offersList.push(`${el.isChecked ? `<li class="event__offer">
-    <span class="event__offer-title">${el.title}</span>
-    &plus;&euro;&nbsp;
-    <span class="event__offer-price">${el.price}</span>
-  </li>` : ``}`);
-    return offersList;
-  });
+  if (pointType.offers !== null) {
+    pointType.offers.forEach((el) => {
+      offersList.push(`${el.isChecked ? `<li class="event__offer">
+      <span class="event__offer-title">${el.title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${el.price}</span>
+    </li>` : ``}`);
+      return offersList;
+    });
+  }
 
   const days = duration._data.days;
   const hours = duration._data.hours;
