@@ -80,7 +80,6 @@ const createEditEventFormTemplate = (data) => {
 
   const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
 
-
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -152,7 +151,7 @@ export default class EditEventPoint extends SmartView {
 
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
-    this._changePointOfferChoiceHandler = this._changePointOfferChoiceHandler.bind(this);
+    this._changePointOfferHandler = this._changePointOfferHandler.bind(this);
     this._changePointPriceHandler = this._changePointPriceHandler.bind(this);
 
     this._setInnerHandlers();
@@ -179,7 +178,7 @@ export default class EditEventPoint extends SmartView {
 
     this.getElement()
     .querySelectorAll(`.event__offer-checkbox`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointOfferChoiceHandler));
+    .forEach((el) => el.addEventListener(`change`, this._changePointOfferHandler));
 
     this.getElement()
     .querySelectorAll(`.event__input--price`)
@@ -216,8 +215,22 @@ export default class EditEventPoint extends SmartView {
     });
   }
 
-  _changePointOfferChoiceHandler(evt) {
+  _changePointOfferHandler(evt) {
     evt.preventDefault();
+
+    let offerTitle = evt.target.parentElement.querySelector(`.event__offer-title`).textContent;
+
+    let i = this._data.pointType.offers.findIndex((el) => el.title === offerTitle);
+
+    this._data.pointType.offers[i].isChecked = evt.target.checked;
+
+    this.updateData({
+      pointType: Object.assign(
+          {},
+          this._data.pointType,
+          {offers: this._data.pointType.offers}
+      )
+    });
   }
 
   _changePointPriceHandler(evt) {

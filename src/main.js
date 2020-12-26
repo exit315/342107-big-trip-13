@@ -10,7 +10,7 @@ const siteMenuWrapper = headerElement.querySelector(`.trip-main`);
 const siteMenuControls = siteMenuWrapper.querySelector(`.trip-controls`);
 const mainElement = document.querySelector(`.page-main`);
 const mainElementContent = mainElement.querySelector(`.trip-events`);
-const EVENTS_COUNT = 2;
+const EVENTS_COUNT = 20;
 
 render(siteMenuWrapper, new TripInfoView(), RenderPosition.AFTERBEGIN);
 render(siteMenuControls, new SiteMenuView(), RenderPosition.BEFOREEND);
