@@ -6,7 +6,8 @@ import {render, RenderPosition} from "../utils/render.js";
 import {updateItem} from "../utils/utils.js";
 
 export default class Trip {
-  constructor(eventsListContainer) {
+  constructor(eventsListContainer, pointsModel) {
+    this._pointsModel = pointsModel;
     this._eventsListContainer = eventsListContainer; // .trip-events
     this._eventsListComponent = new EventsListView(); // .trip-events__list
     this._sortingComponent = new SortingView();
@@ -16,16 +17,17 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
   }
 
-  init(eventsList) {
-    this._eventsList = eventsList.slice();
-
+  init() {
     render(this._eventsListContainer, this._eventsListComponent, RenderPosition.AFTERBEGIN);
 
     this._renderTripBoard();
   }
 
+  _getPoints() {
+    return this._pointsModel.getPoints();
+  }
+
   _handleEventChange(updatedEvent) {
-    this._eventsList = updateItem(this._eventsList, updatedEvent);
     this._pointPresenter[updatedEvent.id].init(updatedEvent);
   }
 
@@ -49,19 +51,17 @@ export default class Trip {
     this._pointPresenter[eventPoint.id] = pointPresenter;
   }
 
-  _renderPointsList() {
-    this._eventsList.forEach((eventItem) => {
-      this._renderPoint(eventItem);
-    });
+  _renderPointsList(points) {
+    points.forEach((point) => this._renderPoint(point));
   }
 
   _renderTripBoard() {
-    if (this._eventsList.length === 0) {
+    if (this._getPoints().length === 0) {
       this._renderNoPoints();
       return;
     }
-    this._renderSorting();
 
-    this._renderPointsList();
+    this._renderSorting();
+    this._renderPointsList(this._getPoints());
   }
 }
