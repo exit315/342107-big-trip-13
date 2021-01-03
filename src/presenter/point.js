@@ -1,7 +1,7 @@
 import EditEventPointView from "../view/edit-form.js";
 import EventPointView from "../view/event-point.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
-import {Mode} from "../utils/const.js";
+import {Mode, UserAction, UpdateType} from "../utils/const.js";
 
 export default class Point {
   constructor(eventsListComponent, changeData, changeMode) {
@@ -18,6 +18,7 @@ export default class Point {
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._escDownHandler = this._escDownHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
   init(eventPoint) {
@@ -31,6 +32,7 @@ export default class Point {
     this._eventComponent.setEditClickHandler(this._editClickHandler);
     this._eventEditComponent.setClickHandler(this._clickHandler);
     this._eventEditComponent.setSubmitFormHandler(this._submitFormHandler);
+    this._eventEditComponent.setDeleteClickHandler(this._deleteClickHandler);
     this._eventComponent.setFavoriteClickHandler(this._favoriteClickHandler);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
@@ -93,6 +95,8 @@ export default class Point {
 
   _favoriteClickHandler() {
     this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._eventPoint,
@@ -103,8 +107,20 @@ export default class Point {
     );
   }
 
+  _deleteClickHandler(eventPoint) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        eventPoint
+    );
+  }
+
   _submitFormHandler(eventPoint) {
-    this._changeData(eventPoint);
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        eventPoint
+    );
     this._replaceFormToCard();
   }
 }

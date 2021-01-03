@@ -109,7 +109,6 @@ const createEditEventFormTemplate = (data) => {
   const pointOffersTemplate = createPointOffersTemplate(pointType);
   const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
 
-
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -172,6 +171,7 @@ export default class EditEventPoint extends SmartView {
     this._data = EditEventPoint.parseEventToData(eventPoint);
     this._clickHandler = this._clickHandler.bind(this);
     this._submitFormHandler = this._submitFormHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
 
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
@@ -258,7 +258,6 @@ export default class EditEventPoint extends SmartView {
           {offers: this._data.pointType.offers}
       )
     });
-
   }
 
   _changePointPriceHandler(evt) {
@@ -273,9 +272,14 @@ export default class EditEventPoint extends SmartView {
     this._callback.click();
   }
 
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EditEventPoint.parseDataToEvent(this._data));
+  }
+
   _submitFormHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(EditEventPoint.parseDataToEvent(this._data));
+    this._callback.submitClick(EditEventPoint.parseDataToEvent(this._data));
   }
 
   setClickHandler(callback) {
@@ -285,8 +289,15 @@ export default class EditEventPoint extends SmartView {
     .addEventListener(`click`, this._clickHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement()
+    .querySelector(`.event__reset-btn`)
+    .addEventListener(`click`, this._deleteClickHandler);
+  }
+
   setSubmitFormHandler(callback) {
-    this._callback.submit = callback;
+    this._callback.submitClick = callback;
     this.getElement()
     .addEventListener(`submit`, this._submitFormHandler);
   }
@@ -295,7 +306,8 @@ export default class EditEventPoint extends SmartView {
     this._setInnerHandlers();
 
     this.setClickHandler(this._callback.click);
-    this.setSubmitFormHandler(this._callback.submit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setSubmitFormHandler(this._callback.submitClick);
   }
 
   static parseEventToData(eventPoint) {
