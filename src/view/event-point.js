@@ -77,7 +77,8 @@ export default class EventPoint extends AbstractView {
     this._callback.editClick();
   }
 
-  _favoriteClickHandler() {
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
     this._callback.favoriteClick();
   }
 

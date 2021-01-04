@@ -366,12 +366,6 @@ export const SORTING_TYPES = [
   `offer`
 ];
 
-export const FILTERS_TYPES = [
-  `everything`,
-  `future`,
-  `past`
-];
-
 export const NEW_EVENT_POINT = {
   pointType: ``,
   destination: ``,
@@ -398,4 +392,10 @@ export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
+};
+
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
 };

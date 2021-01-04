@@ -4,11 +4,13 @@ import NoPointsView from "../view/no-points.js";
 import PointPresenter from "./point.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/const.js";
-
+import {filter} from "../utils/filter.js";
 
 export default class Trip {
-  constructor(eventsListContainer, pointsModel) {
+  constructor(eventsListContainer, pointsModel, filterModel) {
     this._pointsModel = pointsModel;
+    this._filterModel = filterModel;
+
     this._eventsListContainer = eventsListContainer; // .trip-events
     this._eventsListComponent = new EventsListView(); // .trip-events__list
     this._sortingComponent = new SortingView();
@@ -20,6 +22,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -29,7 +32,11 @@ export default class Trip {
   }
 
   _getPoints() {
-    return this._pointsModel.getPoints();
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filtredPoints = filter[filterType](points);
+
+    return filtredPoints;
   }
 
   _handleViewAction(actionType, updateType, update) {
