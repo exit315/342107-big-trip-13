@@ -1,49 +1,12 @@
 import {DESTINATIONS} from "../utils/const.js";
 import {DESTINATION_TYPES} from "../utils/const.js";
-/* import {POINT_TYPES} from "../utils/const.js";*/
 import {POINTS} from "../utils/const.js";
 import dayjs from "dayjs";
 import SmartView from "./smart.js";
 
-const NEW_EVENT_POINT = {
-  pointType: ``,
-  destination: ``,
-  dateBegin: ``,
-  dateEnd: ``,
-  destinationDescription: {
-    text: ``,
-    photo: ``
-  }
-};
-
 const createEditEventFormTemplate = (data) => {
   const {pointType, destination, dateBegin, dateEnd, price} = data;
-
-  /*
-  const pointTypesList = [];
-  POINT_TYPES.forEach((element) => {
-    pointTypesList.push(`<div class="event__type-item">
-      <input id="event-type-${element.toLowerCase()}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}">
-      <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}">${element}</label>
-    </div>`);
-  });
-  */
-
-  /*
-  const offersList = [];
-  pointType.offers.forEach((el) => {
-    offersList.push(`<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" data-type="${el.type}" ${el.isChecked ? `checked` : ``}>
-      <label class="event__offer-label" for="event-offer-${el.type}">
-        <span class="event__offer-title">${el.title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${el.price}</span>
-      </label>
-    </div>`);
-    return offersList;
-  });
-  */
-
+  
   const pointTypesList = [];
   POINTS.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
@@ -146,7 +109,7 @@ const createEditEventFormTemplate = (data) => {
 
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price">
-          <span class="visually-hidden">${price}</span>
+          <span class="visually-hidden">Price</span>
           &euro;
         </label>
         <input class="event__input  event__input--price" id="event-price" type="text" name="event-price" value="${price}">
@@ -166,7 +129,7 @@ const createEditEventFormTemplate = (data) => {
 };
 
 export default class EditEventPoint extends SmartView {
-  constructor(eventPoint = NEW_EVENT_POINT) {
+  constructor(eventPoint) {
     super();
     this._data = EditEventPoint.parseEventToData(eventPoint);
     this._clickHandler = this._clickHandler.bind(this);
