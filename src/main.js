@@ -12,7 +12,7 @@ const siteMenuWrapper = headerElement.querySelector(`.trip-main`);
 const siteMenuControls = siteMenuWrapper.querySelector(`.trip-controls`);
 const mainElement = document.querySelector(`.page-main`);
 const mainElementContent = mainElement.querySelector(`.trip-events`);
-const EVENTS_COUNT = 22;
+const EVENTS_COUNT = 3;
 
 render(siteMenuWrapper, new TripInfoView(), RenderPosition.AFTERBEGIN);
 render(siteMenuControls, new SiteMenuView(), RenderPosition.BEFOREEND);
@@ -29,3 +29,9 @@ const filterPresenter = new FilterPresenter(siteMenuControls, filterModel);
 
 tripPresenter.init();
 filterPresenter.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  tripPresenter.createPoint();
+  evt.target.disabled = true;
+});
