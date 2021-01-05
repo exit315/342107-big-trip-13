@@ -2,8 +2,9 @@ import EventsListView from "../view/events-list.js";
 import SortingView from "../view/sorting.js";
 import NoPointsView from "../view/no-points.js";
 import PointPresenter from "./point.js";
+import PointNewPresenter from "./point-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {UserAction, UpdateType} from "../utils/const.js";
+import {UserAction, UpdateType, FilterType} from "../utils/const.js";
 import {filter} from "../utils/filter.js";
 
 export default class Trip {
@@ -23,12 +24,19 @@ export default class Trip {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._pointNewPresenter = new PointNewPresenter(this._eventsListComponent, this._handleViewAction);
   }
 
   init() {
     render(this._eventsListContainer, this._eventsListComponent, RenderPosition.AFTERBEGIN);
 
     this._renderTripBoard();
+  }
+
+  createPoint() {
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init();
   }
 
   _getPoints() {
@@ -70,6 +78,8 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
+
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.resetEventPointView());
@@ -101,6 +111,8 @@ export default class Trip {
   }
 
   _clearTripBoard() {
+    this._pointNewPresenter.destroy();
+
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
