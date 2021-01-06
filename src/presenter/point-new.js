@@ -24,7 +24,7 @@ export default class PointNew {
     this._eventCreateComponent.setSubmitFormHandler(this._submitFormHandler);
     this._eventCreateComponent.setCanselClickHandler(this._canselClickHandler);
 
-    render(this._eventsListComponent, this._eventCreateComponent, RenderPosition.BEFOREEND);
+    render(this._eventsListComponent, this._eventCreateComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._escDownHandler);
   }
