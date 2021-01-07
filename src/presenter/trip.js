@@ -1,14 +1,13 @@
-import EventsListView from "../view/events-list.js";
-import SortView from "../view/sort.js";
-import NoPointsView from "../view/no-points.js";
-import PointPresenter from "./point.js";
-import PointNewPresenter from "./point-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType, FilterType} from "../utils/const.js";
 import {filter} from "../utils/filter.js";
 import {sortPointDefaultDateUp, sortPointPriceUp, sortPointDurationUp} from "../utils/sort.js";
 import {SortType} from "../utils/const.js";
-
+import EventsListView from "../view/events-list.js";
+import SortView from "../view/sort.js";
+import NoPointsView from "../view/no-points.js";
+import PointPresenter from "./point.js";
+import PointNewPresenter from "./point-new.js";
 
 export default class Trip {
   constructor(eventsListContainer, pointsModel, filterModel) {

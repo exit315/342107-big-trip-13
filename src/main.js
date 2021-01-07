@@ -1,7 +1,7 @@
-import SiteMenuView from "./view/site-menu.js";
-import TripInfoView from "./view/trip-info.js";
 import {generateEventPoint} from "./mock/event-point.js";
 import {render, RenderPosition} from "./utils/render.js";
+import SiteMenuView from "./view/site-menu.js";
+import TripInfoView from "./view/trip-info.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import TripPresenter from "./presenter/trip.js";

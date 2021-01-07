@@ -21,8 +21,7 @@ const createEventPointDestination = () => {
 };
 
 const generateDate = () => {
-  const maxDayGap = 7;
-  const daysGap = getRandomInteger(0, maxDayGap);
+  const daysGap = getRandomInteger(1, 14);
 
   return dayjs().add(daysGap, `day`).toDate();
 };
@@ -42,8 +41,8 @@ export const generateEventPoint = () => {
     id: generateId(),
     pointType: createEventPointType(),
     destination: createEventPointDestination(),
-    timeBegin: dayjs(dateBegin).format(`H:MM`),
-    timeEnd: dayjs(dateEnd).format(`H:MM`),
+    timeBegin: dayjs(dateBegin),
+    timeEnd: dayjs(dateEnd),
     dateBegin: dayjs(dateBegin),
     dateEnd: dayjs(dateEnd),
     duration: generateDuration(dayjs(dateBegin), dayjs(dateEnd)),

@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
@@ -28,16 +29,16 @@ const createEventPointTemplate = (eventPoint) => {
 
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date">${dateBegin.format(`MMM DD`)}</time> 
+      <time class="event__date">${dayjs(dateBegin).format(`MMM DD`)}</time> 
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType.typeOfPoint}.png" alt="Event type icon">
       </div>
       <h3 class="event__title">${pointType.typeOfPoint} ${destination.title}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time">${timeBegin}</time>
+          <time class="event__start-time">${dayjs(timeBegin).format(`HH:MM`)}</time>
           &mdash;
-          <time class="event__end-time">${timeEnd}</time>
+          <time class="event__end-time">${dayjs(timeEnd).format(`HH:MM`)}</time>
         </p>
         <p class="event__duration">${eventDuration}</p>
       </div>
