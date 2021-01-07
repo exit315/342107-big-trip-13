@@ -6,7 +6,7 @@ import SmartView from "./smart.js";
 
 const createEditEventFormTemplate = (data) => {
   const {pointType, destination, dateBegin, dateEnd, price} = data;
-  
+
   const pointTypesList = [];
   POINTS.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">

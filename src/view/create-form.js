@@ -150,7 +150,7 @@ export default class CreateEventPoint extends SmartView {
 
   reset(eventPoint) {
     this.updateData(
-      CreateEventPoint.parseEventToData(eventPoint)
+        CreateEventPoint.parseEventToData(eventPoint)
     );
   }
 
