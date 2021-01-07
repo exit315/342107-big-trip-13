@@ -20,7 +20,6 @@ const createEditEventFormTemplate = (data) => {
     destinationsList.push(`<option value="${el}"></option>`);
   });
 
-
   const createPointOffersTemplate = () => {
     const offersList = [];
 
@@ -93,7 +92,7 @@ const createEditEventFormTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination">
           ${pointType.typeOfPoint}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination" type="text" name="event-destination" value="${destination.title}" list="destination-list">
+        <input class="event__input  event__input--destination" id="event-destination" name="event-destination" value="${destination.title}" list="destination-list">
         <datalist id="destination-list">
         ${destinationsList.join(``)}
         </datalist>
@@ -112,7 +111,7 @@ const createEditEventFormTemplate = (data) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price" type="text" name="event-price" value="${price}">
+        <input class="event__input  event__input--price" id="event-price" type="text" name="event-price" value="${price}" onkeyup="this.value = this.value.replace(/[^0-9]/g, '');">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

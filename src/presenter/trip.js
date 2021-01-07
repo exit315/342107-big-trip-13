@@ -79,6 +79,7 @@ export default class Trip {
 
   _handleModeChange() {
     this._pointNewPresenter.destroy();
+    document.querySelector(`.trip-main__event-add-btn`).disabled = false;
 
     Object
       .values(this._pointPresenter)
