@@ -358,13 +358,13 @@ export const ADDITIONAL_OFFERS = [
   }
 ];
 
-export const SORTING_TYPES = [
-  `day`,
-  `event`,
-  `time`,
-  `price`,
-  `offer`
-];
+export const SortType = {
+  DAY: `day`,
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`,
+  OFFER: `offer`
+};
 
 export const NEW_EVENT_POINT = {
   pointType: ``,
