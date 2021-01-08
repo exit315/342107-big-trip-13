@@ -3,6 +3,7 @@ import flatpickr from "flatpickr";
 import {DESTINATIONS} from "../utils/const.js";
 import {DESTINATION_TYPES} from "../utils/const.js";
 import {POINTS} from "../utils/const.js";
+import {generateDuration} from "../utils/utils.js";
 import SmartView from "./smart.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -12,11 +13,15 @@ const NEW_EVENT_POINT = {
   destination: {title: ``, description: null, photos: null},
   dateBegin: dayjs(),
   dateEnd: dayjs(),
+  timeBegin: dayjs(),
+  timeEnd: dayjs(),
   price: ``,
+  isFavorite: false,
+  duration: ``
 };
 
 export const createNewEventFormTemplate = (data) => {
-  const {pointType, destination, dateBegin, dateEnd, price} = data;
+  const {pointType, destination, dateBegin, dateEnd, price, timeBegin, timeEnd} = data;
 
   const pointTypesList = [];
   POINTS.forEach((el) => {
@@ -112,10 +117,10 @@ export const createNewEventFormTemplate = (data) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
-        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY`) + ` ` + dayjs(timeBegin).format(`HH:MM`)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time">To</label>
-        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY`) + ` ` + dayjs(timeEnd).format(`HH:MM`)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -144,6 +149,7 @@ export default class CreateEventPoint extends SmartView {
 
     this._submitFormHandler = this._submitFormHandler.bind(this);
     this._canselClickHandler = this._canselClickHandler.bind(this);
+
     this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
     this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
@@ -185,15 +191,15 @@ export default class CreateEventPoint extends SmartView {
 
   _changeDateEventBeginHandler([userDate]) {
     this.updateData({
-        dateBegin: dayjs(userDate),
-        timeBegin: dayjs(userDate)
+      dateBegin: dayjs(userDate),
+      timeBegin: dayjs(userDate)
     }, true);
   }
 
   _changeDateEventEndHandler([userDate]) {
     this.updateData({
-        dateEnd: dayjs(userDate),
-        timeEnd: dayjs(userDate)
+      dateEnd: dayjs(userDate),
+      timeEnd: dayjs(userDate)
     }, true);
   }
 
@@ -264,6 +270,11 @@ export default class CreateEventPoint extends SmartView {
 
   _submitFormHandler(evt) {
     evt.preventDefault();
+
+    this.updateData({
+      duration: generateDuration(this._data.dateBegin, this._data.dateEnd)
+    }, true);
+
     this._callback.submitClick(CreateEventPoint.parseDataToEvent(this._data));
     document.querySelector(`.trip-main__event-add-btn`).disabled = false;
   }
@@ -277,7 +288,7 @@ export default class CreateEventPoint extends SmartView {
     this._datepicker = flatpickr(
         this.getElement().querySelector(`.event__input--start-time`),
         {
-          minDate: "today",
+          minDate: `today`,
           enableTime: true,
           dateFormat: `d/m/y H:i`,
           onChange: this._changeDateEventBeginHandler
@@ -285,13 +296,13 @@ export default class CreateEventPoint extends SmartView {
     );
 
     this._datepicker = flatpickr(
-      this.getElement().querySelector(`.event__input--end-time`),
-      {
-        minDate: "today",
-        enableTime: true,
-        dateFormat: `d/m/y H:i`,
-        onChange: this._changeDateEventEndHandler
-      }
+        this.getElement().querySelector(`.event__input--end-time`),
+        {
+          minDate: `today`,
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._changeDateEventEndHandler
+        }
     );
   }
 
@@ -324,7 +335,10 @@ export default class CreateEventPoint extends SmartView {
   }
 
   static parseDataToEvent(data) {
-    data = Object.assign({}, data);
+    data = Object.assign(
+        {},
+        data
+    );
 
     return data;
   }

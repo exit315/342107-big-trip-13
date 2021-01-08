@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import moment from "moment";
+
 import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
@@ -17,15 +19,15 @@ const createEventPointTemplate = (eventPoint) => {
     });
   }
 
-  const days = duration._data.days;
-  const hours = duration._data.hours;
-  const minutes = duration._data.minutes;
+  const eventDuration = moment.duration(duration);
 
-  const eventDuration = `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
+  const days = eventDuration._data.days;
+  const hours = eventDuration._data.hours;
+  const minutes = eventDuration._data.minutes;
+
+  const eventDurationTemplate = `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
   ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
   ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
-
-  const favorite = (isFavorite) ? ` event__favorite-btn--active` : ``;
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -40,7 +42,7 @@ const createEventPointTemplate = (eventPoint) => {
           &mdash;
           <time class="event__end-time">${dayjs(timeEnd).format(`HH:MM`)}</time>
         </p>
-        <p class="event__duration">${eventDuration}</p>
+        <p class="event__duration">${eventDurationTemplate}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -49,7 +51,7 @@ const createEventPointTemplate = (eventPoint) => {
       <ul class="event__selected-offers">
         ${offersList.join(``)}
       </ul>
-      <button class="event__favorite-btn${favorite}" type="button">
+      <button class="event__favorite-btn${isFavorite ? ` event__favorite-btn--active` : ``}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
           <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>

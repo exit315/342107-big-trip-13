@@ -111,7 +111,7 @@ export default class Trip {
   }
 
   _renderNoPoints() {
-    render(this._eventsListContainer, this._noPointsComponent, RenderPosition.AFTERBEGIN);
+    render(this._eventsListContainer, this._noPointsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderSort() {

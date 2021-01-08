@@ -1,9 +1,8 @@
 import dayjs from "dayjs";
-import moment from "moment";
 import {nanoid} from '../vendor/nanoid';
 import {DESTINATIONS} from "../utils/const.js";
 import {POINTS} from "../utils/const.js";
-import {getRandomInteger} from "../utils/utils.js";
+import {getRandomInteger, generateDuration} from "../utils/utils.js";
 
 export const generateId = () => {
   const eventPointId = nanoid();
@@ -24,13 +23,6 @@ const generateDate = () => {
   const daysGap = getRandomInteger(1, 14);
 
   return dayjs().add(daysGap, `day`).toDate();
-};
-
-const generateDuration = (dayStart, dayEnd) => {
-  const difference = dayEnd.diff(dayStart, `ms`);
-  const duration = moment.duration(difference);
-
-  return duration;
 };
 
 export const generateEventPoint = () => {
