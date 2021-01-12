@@ -128,7 +128,7 @@ export const createNewEventFormTemplate = (data) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price" type="text" name="event-price" value="${price}" onkeyup="this.value = this.value.replace(/[^0-9]/g, '');">
+        <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
