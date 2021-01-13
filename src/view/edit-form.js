@@ -1,48 +1,14 @@
+import dayjs from "dayjs";
+import flatpickr from "flatpickr";
 import {DESTINATIONS} from "../utils/const.js";
 import {DESTINATION_TYPES} from "../utils/const.js";
-/* import {POINT_TYPES} from "../utils/const.js";*/
 import {POINTS} from "../utils/const.js";
-import dayjs from "dayjs";
 import SmartView from "./smart.js";
 
-const NEW_EVENT_POINT = {
-  pointType: ``,
-  destination: ``,
-  dateBegin: ``,
-  dateEnd: ``,
-  destinationDescription: {
-    text: ``,
-    photo: ``
-  }
-};
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEditEventFormTemplate = (data) => {
   const {pointType, destination, dateBegin, dateEnd, price} = data;
-
-  /*
-  const pointTypesList = [];
-  POINT_TYPES.forEach((element) => {
-    pointTypesList.push(`<div class="event__type-item">
-      <input id="event-type-${element.toLowerCase()}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}">
-      <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}">${element}</label>
-    </div>`);
-  });
-  */
-
-  /*
-  const offersList = [];
-  pointType.offers.forEach((el) => {
-    offersList.push(`<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" data-type="${el.type}" ${el.isChecked ? `checked` : ``}>
-      <label class="event__offer-label" for="event-offer-${el.type}">
-        <span class="event__offer-title">${el.title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${el.price}</span>
-      </label>
-    </div>`);
-    return offersList;
-  });
-  */
 
   const pointTypesList = [];
   POINTS.forEach((el) => {
@@ -54,9 +20,8 @@ const createEditEventFormTemplate = (data) => {
 
   const destinationsList = [];
   DESTINATION_TYPES.forEach((el) => {
-    destinationsList.push(`<option value="${el}"></option>`);
+    destinationsList.push(`<option value="${el}" ${el === destination.title ? `selected` : ``}>${el}</option>`);
   });
-
 
   const createPointOffersTemplate = () => {
     const offersList = [];
@@ -76,7 +41,7 @@ const createEditEventFormTemplate = (data) => {
       return `<section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
-            ${offersList}
+            ${offersList.join(``)}
           </div>
         </section>`;
     } else {
@@ -109,7 +74,6 @@ const createEditEventFormTemplate = (data) => {
   const pointOffersTemplate = createPointOffersTemplate(pointType);
   const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
 
-
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -131,10 +95,9 @@ const createEditEventFormTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination">
           ${pointType.typeOfPoint}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination" type="text" name="event-destination" value="${destination.title}" list="destination-list">
-        <datalist id="destination-list">
-        ${destinationsList.join(``)}
-        </datalist>
+        <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
+          ${destinationsList.join(``)}
+        </select>
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -147,10 +110,10 @@ const createEditEventFormTemplate = (data) => {
 
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price">
-          <span class="visually-hidden">${price}</span>
+          <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price" type="text" name="event-price" value="${price}">
+        <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -167,18 +130,23 @@ const createEditEventFormTemplate = (data) => {
 };
 
 export default class EditEventPoint extends SmartView {
-  constructor(eventPoint = NEW_EVENT_POINT) {
+  constructor(eventPoint) {
     super();
     this._data = EditEventPoint.parseEventToData(eventPoint);
-    this._clickHandler = this._clickHandler.bind(this);
-    this._submitFormHandler = this._submitFormHandler.bind(this);
+    this._datepicker = null;
 
+    this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
+    this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
     this._changePointOfferHandler = this._changePointOfferHandler.bind(this);
     this._changePointPriceHandler = this._changePointPriceHandler.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
+    this._submitFormHandler = this._submitFormHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setDatepicker();
   }
 
   reset(eventPoint) {
@@ -207,6 +175,20 @@ export default class EditEventPoint extends SmartView {
     this.getElement()
     .querySelectorAll(`.event__input--price`)
     .forEach((el) => el.addEventListener(`change`, this._changePointPriceHandler));
+  }
+
+  _changeDateEventBeginHandler([userDate]) {
+    this.updateData({
+      dateBegin: dayjs(userDate),
+      timeBegin: dayjs(userDate)
+    }, true);
+  }
+
+  _changeDateEventEndHandler([userDate]) {
+    this.updateData({
+      dateEnd: dayjs(userDate),
+      timeEnd: dayjs(userDate)
+    }, true);
   }
 
   _changePointTypeHandler(evt) {
@@ -258,7 +240,6 @@ export default class EditEventPoint extends SmartView {
           {offers: this._data.pointType.offers}
       )
     });
-
   }
 
   _changePointPriceHandler(evt) {
@@ -273,9 +254,41 @@ export default class EditEventPoint extends SmartView {
     this._callback.click();
   }
 
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EditEventPoint.parseDataToEvent(this._data));
+  }
+
   _submitFormHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(EditEventPoint.parseDataToEvent(this._data));
+    this._callback.submitClick(EditEventPoint.parseDataToEvent(this._data));
+  }
+
+  _setDatepicker() {
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+
+    this._datepicker = flatpickr(
+        this.getElement().querySelector(`.event__input--start-time`),
+        {
+          minDate: `today`,
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._changeDateEventBeginHandler
+        }
+    );
+
+    this._datepicker = flatpickr(
+        this.getElement().querySelector(`.event__input--end-time`),
+        {
+          minDate: `today`,
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._changeDateEventEndHandler
+        }
+    );
   }
 
   setClickHandler(callback) {
@@ -285,17 +298,26 @@ export default class EditEventPoint extends SmartView {
     .addEventListener(`click`, this._clickHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement()
+    .querySelector(`.event__reset-btn`)
+    .addEventListener(`click`, this._deleteClickHandler);
+  }
+
   setSubmitFormHandler(callback) {
-    this._callback.submit = callback;
+    this._callback.submitClick = callback;
     this.getElement()
     .addEventListener(`submit`, this._submitFormHandler);
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepicker();
 
     this.setClickHandler(this._callback.click);
-    this.setSubmitFormHandler(this._callback.submit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setSubmitFormHandler(this._callback.submitClick);
   }
 
   static parseEventToData(eventPoint) {

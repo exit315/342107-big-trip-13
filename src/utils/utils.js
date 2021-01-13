@@ -4,6 +4,11 @@ export const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
+export const generateDuration = (dayStart, dayEnd) => {
+  const difference = dayEnd.diff(dayStart, `ms`);
+  return difference;
+};
+
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;

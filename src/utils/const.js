@@ -358,19 +358,13 @@ export const ADDITIONAL_OFFERS = [
   }
 ];
 
-export const SORTING_TYPES = [
-  `day`,
-  `event`,
-  `time`,
-  `price`,
-  `offer`
-];
-
-export const FILTERS_TYPES = [
-  `everything`,
-  `future`,
-  `past`
-];
+export const SortType = {
+  DAY: `day`,
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`,
+  OFFER: `offer`
+};
 
 export const NEW_EVENT_POINT = {
   pointType: ``,
@@ -386,4 +380,22 @@ export const NEW_EVENT_POINT = {
 export const Mode = {
   DEFAULT: `DEFAULT`,
   EDITING: `EDITING`
+};
+
+export const UserAction = {
+  UPDATE_POINT: `UPDATE_POINT`,
+  ADD_POINT: `ADD_POINT`,
+  DELETE_POINT: `DELETE_POINT`
+};
+
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
 };

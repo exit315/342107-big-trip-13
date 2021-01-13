@@ -23,6 +23,15 @@ module.exports = {
 
   watch: true,
 
+  module: {
+    rules: [
+        {
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader']
+        }
+    ]
+  },
+
   plugins: [
     new webpack.SourceMapDevToolPlugin({
       filename: '[file].map'
