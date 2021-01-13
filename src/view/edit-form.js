@@ -20,7 +20,7 @@ const createEditEventFormTemplate = (data) => {
 
   const destinationsList = [];
   DESTINATION_TYPES.forEach((el) => {
-    destinationsList.push(`<option value="${el}"></option>`);
+    destinationsList.push(`<option value="${el}" ${el === destination.title ? `selected` : ``}>${el}</option>`);
   });
 
   const createPointOffersTemplate = () => {
@@ -95,10 +95,9 @@ const createEditEventFormTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination">
           ${pointType.typeOfPoint}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination" name="event-destination" value="${destination.title}" list="destination-list">
-        <datalist id="destination-list">
-        ${destinationsList.join(``)}
-        </datalist>
+        <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
+          ${destinationsList.join(``)}
+        </select>
       </div>
 
       <div class="event__field-group  event__field-group--time">

@@ -33,9 +33,8 @@ export const createNewEventFormTemplate = (data) => {
 
   const destinationsList = [];
   DESTINATION_TYPES.forEach((el) => {
-    destinationsList.push(`<option value="${el}"></option>`);
+    destinationsList.push(`<option value="${el}" ${el === destination.title ? `selected` : ``}>${el}</option>`);
   });
-
 
   const createPointOffersTemplate = () => {
     const offersList = [];
@@ -109,10 +108,9 @@ export const createNewEventFormTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination">
           ${pointType.typeOfPoint}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination" type="text" name="event-destination" value="${destination.title}" list="destination-list">
-        <datalist id="destination-list">
+        <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
           ${destinationsList.join(``)}
-        </datalist>
+        </select>
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -224,12 +222,14 @@ export default class CreateEventPoint extends SmartView {
   _changePointDestinationHandler(evt) {
     evt.preventDefault();
 
-    let i = DESTINATIONS.findIndex((el) => el.title === evt.target.value);
-
+    let selectedValue = evt.target.options[evt.target.selectedIndex].value;
+    
+    let i = DESTINATIONS.findIndex((el) => el.title === selectedValue);
+    
     this.updateData({
       destination: Object.assign(
           {},
-          {title: evt.target.value},
+          {title: selectedValue},
           {description: DESTINATIONS[i].description},
           {photos: DESTINATIONS[i].photos}
       )
