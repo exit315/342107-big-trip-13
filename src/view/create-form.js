@@ -223,9 +223,8 @@ export default class CreateEventPoint extends SmartView {
     evt.preventDefault();
 
     let selectedValue = evt.target.options[evt.target.selectedIndex].value;
-    
     let i = DESTINATIONS.findIndex((el) => el.title === selectedValue);
-    
+
     this.updateData({
       destination: Object.assign(
           {},
