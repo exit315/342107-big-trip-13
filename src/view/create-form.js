@@ -5,7 +5,6 @@ import {DESTINATION_TYPES} from "../utils/const.js";
 import {POINTS} from "../utils/const.js";
 import {generateDuration} from "../utils/utils.js";
 import SmartView from "./smart.js";
-
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const NEW_EVENT_POINT = {
@@ -109,6 +108,7 @@ export const createNewEventFormTemplate = (data) => {
           ${pointType.typeOfPoint}
         </label>
         <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
+          <option></option>
           ${destinationsList.join(``)}
         </select>
       </div>
@@ -210,10 +210,12 @@ export default class CreateEventPoint extends SmartView {
       POINTS[i].offers.forEach((el) => (el.isChecked = false));
     }
 
+    let typeName = evt.target.value.charAt(0).toUpperCase() + evt.target.value.slice(1);
+
     this.updateData({
       pointType: Object.assign(
           {},
-          {typeOfPoint: evt.target.value},
+          {typeOfPoint: typeName},
           {offers: POINTS[i].offers}
       )
     });
