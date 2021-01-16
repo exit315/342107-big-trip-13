@@ -262,7 +262,6 @@ export const DESTINATION_TYPES = [
   `Reykjavík`
 ];
 
-
 export const DESTINATIONS = [
   {
     title: `Liverpool`,
@@ -398,4 +397,9 @@ export const FilterType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`
+};
+
+export const MenuItem = {
+  TABLE: `Table`,
+  STATS: `Stats`
 };
