@@ -15,7 +15,9 @@ export default class PointNew {
     this._canselClickHandler = this._canselClickHandler.bind(this);
   }
 
-  init() {
+  init(callback) {
+    this._destroyCallback = callback;
+
     if (this._eventCreateComponent !== null) {
       return;
     }
@@ -34,6 +36,10 @@ export default class PointNew {
       return;
     }
 
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
+
     remove(this._eventCreateComponent);
     this._eventCreateComponent = null;
 
@@ -44,7 +50,6 @@ export default class PointNew {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this.destroy();
-      document.querySelector(`.trip-main__event-add-btn`).disabled = false;
     }
   }
 

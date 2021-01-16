@@ -1,37 +1,75 @@
 import {generateEventPoint} from "./mock/event-point.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, remove} from "./utils/render.js";
+import {MenuItem, UpdateType, FilterType} from "./utils/const.js";
 import SiteMenuView from "./view/site-menu.js";
 import TripInfoView from "./view/trip-info.js";
+import AddNewPointBtn from "./view/add-point-btn.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import TripPresenter from "./presenter/trip.js";
 import FilterPresenter from "./presenter/filter.js";
+import StatisticsView from "./view/statistics.js";
+
+const EVENTS_COUNT = 3;
 
 const headerElement = document.querySelector(`.page-header`);
 const siteMenuWrapper = headerElement.querySelector(`.trip-main`);
 const siteMenuControls = siteMenuWrapper.querySelector(`.trip-controls`);
 const mainElement = document.querySelector(`.page-main`);
-const mainElementContent = mainElement.querySelector(`.trip-events`);
-const EVENTS_COUNT = 3;
-
-render(siteMenuWrapper, new TripInfoView(), RenderPosition.AFTERBEGIN);
-render(siteMenuControls, new SiteMenuView(), RenderPosition.BEFOREEND);
-
-const points = new Array(EVENTS_COUNT).fill().map(generateEventPoint);
+const eventsComponent = mainElement.querySelector(`.trip-events`);
 
 const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
-
 const filterModel = new FilterModel();
-
-const tripPresenter = new TripPresenter(mainElementContent, pointsModel, filterModel);
+const tripInfo = new TripInfoView();
+const addNewPointBtn = new AddNewPointBtn();
+const siteMenu = new SiteMenuView();
 const filterPresenter = new FilterPresenter(siteMenuControls, filterModel);
+const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel);
+
+const points = new Array(EVENTS_COUNT).fill().map(generateEventPoint);
+pointsModel.setPoints(points);
 
 tripPresenter.init();
 filterPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  tripPresenter.createPoint();
-  evt.target.disabled = true;
-});
+render(siteMenuWrapper, tripInfo, RenderPosition.AFTERBEGIN);
+render(siteMenuControls, siteMenu, RenderPosition.AFTERBEGIN);
+render(siteMenuWrapper, addNewPointBtn, RenderPosition.BEFOREEND);
+
+let statisticsComponent = null;
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      remove(statisticsComponent);
+      eventsComponent.classList.remove(`trip-events--hidden`);
+      siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
+      siteMenu.getElement().querySelector(`.${MenuItem.STATS.toLowerCase()}`).classList.remove(`trip-tabs__btn--active`);
+      break;
+    case MenuItem.STATS:
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
+      eventsComponent.classList.add(`trip-events--hidden`);
+      siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.remove(`trip-tabs__btn--active`);
+      siteMenu.getElement().querySelector(`.${MenuItem.STATS.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
+      break;
+  }
+};
+
+const handleNewPointFormClose = () => {
+  siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = false;
+  siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.remove(`trip-tabs__btn--active`);
+};
+
+const handleNewPointFormOpen = () => {
+  tripPresenter.destroy();
+  filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+  tripPresenter.init();
+
+  tripPresenter.createPoint(handleNewPointFormClose);
+  siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = true;
+  siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
+};
+
+siteMenu.setMenuClickHandler(handleSiteMenuClick);
+siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, handleNewPointFormOpen);
