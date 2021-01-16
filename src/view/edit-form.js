@@ -3,6 +3,7 @@ import flatpickr from "flatpickr";
 import {DESTINATIONS} from "../utils/const.js";
 import {DESTINATION_TYPES} from "../utils/const.js";
 import {POINTS} from "../utils/const.js";
+import {generateDuration} from "../utils/utils.js";
 import SmartView from "./smart.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -96,6 +97,7 @@ const createEditEventFormTemplate = (data) => {
           ${pointType.typeOfPoint}
         </label>
         <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
+          <option></option>
           ${destinationsList.join(``)}
         </select>
       </div>
@@ -261,6 +263,11 @@ export default class EditEventPoint extends SmartView {
 
   _submitFormHandler(evt) {
     evt.preventDefault();
+
+    this.updateData({
+      duration: generateDuration(this._data.dateBegin, this._data.dateEnd)
+    }, true);
+
     this._callback.submitClick(EditEventPoint.parseDataToEvent(this._data));
   }
 
