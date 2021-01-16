@@ -11,6 +11,7 @@ export const generateId = () => {
 
 const createEventPointType = () => {
   const randomIndex = getRandomInteger(0, POINTS.length - 1);
+
   return POINTS[randomIndex];
 };
 
