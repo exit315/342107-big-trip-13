@@ -6,20 +6,24 @@ import {SortType} from "../utils/const.js";
 import EventsListView from "../view/events-list.js";
 import SortView from "../view/sort.js";
 import NoPointsView from "../view/no-points.js";
+import LoadingView from "../view/loading.js";
 import PointPresenter from "./point.js";
 import PointNewPresenter from "./point-new.js";
 
 export default class Trip {
-  constructor(eventsComponent, pointsModel, filterModel) {
+  constructor(eventsComponent, pointsModel, filterModel, api) {
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
-
     this._eventsComponent = eventsComponent; // .trip-events
+    this._pointPresenter = {};
+    this._currentSortType = SortType.DAY;
+    this._isLoading = true;
+    this._api = api;
+
     this._eventsListComponent = new EventsListView(); // .trip-events__list
     this._sortComponent = new SortView();
     this._noPointsComponent = new NoPointsView();
-    this._pointPresenter = {};
-    this._currentSortType = SortType.DAY;
+    this._loadingComponent = new LoadingView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -72,7 +76,9 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
@@ -94,6 +100,11 @@ export default class Trip {
         break;
       case UpdateType.MAJOR:
         this._clearTripBoard({resetSortType: true});
+        this._renderTripBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderTripBoard();
         break;
     }
@@ -119,6 +130,10 @@ export default class Trip {
 
   _renderNoPoints() {
     render(this._eventsComponent, this._noPointsComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderLoading() {
+    render(this._eventsComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderSort() {
@@ -153,6 +168,7 @@ export default class Trip {
 
     remove(this._sortComponent);
     remove(this._noPointsComponent);
+    remove(this._loadingComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
@@ -160,6 +176,11 @@ export default class Trip {
   }
 
   _renderTripBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     if (this._getPoints().length === 0) {
       this._renderNoPoints();
       return;
