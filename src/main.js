@@ -88,12 +88,12 @@ export const DESTINATIONS = [];
 
 api.getDestinations()
   .then((destinations) => {
-    destinations.map((destination) => DESTINATIONS.push(destination))
+    destinations.map((destination) => DESTINATIONS.push(destination));
   });
 
 export const OFFERS = [];
 
 api.getOffers()
   .then((offers) => {
-    offers.map((offer) => OFFERS.push(offer))
+    offers.map((offer) => OFFERS.push(offer));
   });

@@ -75,7 +75,7 @@ export default class Points extends Observer {
           isFavorite: point.is_favorite
         }
     );
-    
+
     delete adaptedPoint.date_from;
     delete adaptedPoint.date_to;
     delete adaptedPoint.base_price;

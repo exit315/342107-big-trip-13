@@ -208,11 +208,6 @@ export default class CreateEventPoint extends SmartView {
     evt.preventDefault();
 
     let i = OFFERS.findIndex((el) => el.type === evt.target.value);
-/*
-    if (OFFERS[i].offers !== null) {
-      OFFERS[i].offers.forEach((el) => (el.isChecked = false));
-    }
-*/
     let typeName = evt.target.value.charAt(0).toUpperCase() + evt.target.value.slice(1);
 
     this.updateData({
@@ -229,8 +224,6 @@ export default class CreateEventPoint extends SmartView {
 
     let selectedValue = evt.target.options[evt.target.selectedIndex].value;
     let i = DESTINATIONS.findIndex((el) => el.name === selectedValue);
-
-    console.log(selectedValue)
 
     this.updateData({
       destination: Object.assign(

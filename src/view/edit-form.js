@@ -28,7 +28,7 @@ const createEditEventFormTemplate = (data) => {
 
     if (pointType.offers !== null) {
       let i = 1;
-      
+
       pointType.offers.forEach((el) => {
         offersList.push(`<div class="event__offer-selector">
           <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" ${el.isChecked ? `checked` : ``}>
@@ -199,11 +199,7 @@ export default class EditEventPoint extends SmartView {
     evt.preventDefault();
 
     let i = OFFERS.findIndex((el) => el.type === evt.target.value);
-/*
-    if (OFFERS[i].offers !== null) {
-      OFFERS[i].offers.forEach((el) => (el.isChecked = false));
-    }
-*/
+
     this.updateData({
       pointType: Object.assign(
           {},
