@@ -1,8 +1,7 @@
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
-import {DESTINATIONS} from "../utils/const.js";
-import {DESTINATION_TYPES} from "../utils/const.js";
-import {POINTS} from "../utils/const.js";
+import {DESTINATIONS} from "../main.js";
+import {OFFERS} from "../main.js";
 import {generateDuration} from "../utils/utils.js";
 import SmartView from "./smart.js";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -23,31 +22,34 @@ export const createNewEventFormTemplate = (data) => {
   const {pointType, destination, dateBegin, dateEnd, price, timeBegin, timeEnd} = data;
 
   const pointTypesList = [];
-  POINTS.forEach((el) => {
+  OFFERS.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
-      <input id="event-type-${el.typeOfPoint.toLowerCase()}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.typeOfPoint.toLowerCase()}">
-      <label class="event__type-label  event__type-label--${el.typeOfPoint.toLowerCase()}" for="event-type-${el.typeOfPoint.toLowerCase()}">${el.typeOfPoint}</label>
+      <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
+      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type}</label>
     </div>`);
   });
 
   const destinationsList = [];
-  DESTINATION_TYPES.forEach((el) => {
-    destinationsList.push(`<option value="${el}" ${el === destination.title ? `selected` : ``}>${el}</option>`);
+  DESTINATIONS.forEach((el) => {
+    destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
   });
 
   const createPointOffersTemplate = () => {
     const offersList = [];
 
     if (pointType.offers !== null) {
+      let i = 1;
+
       pointType.offers.forEach((el) => {
         offersList.push(`<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.type}" type="checkbox" name="event-offer-${el.type}" data-type="${el.type}" ${el.isChecked ? `checked` : ``}>
-          <label class="event__offer-label" for="event-offer-${el.type}">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" data-type="${pointType.typeOfPoint + i}">
+          <label class="event__offer-label" for="event-offer-${pointType.typeOfPoint + i}">
             <span class="event__offer-title">${el.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${el.price}</span>
           </label>
         </div>`);
+        i++;
       });
 
       return `<section class="event__section  event__section--offers">
@@ -64,14 +66,15 @@ export const createNewEventFormTemplate = (data) => {
   const createPointDestinationDescriptionTemplate = () => {
     const photosList = [];
 
-    if (destination.photos !== null && destination.description !== null) {
+
+    if (destination.photos !== null) {
       destination.photos.forEach((el) => {
-        photosList.push(`<img class="event__photo" src="${el}" alt="Event photo">`);
+        photosList.push(`<img class="event__photo" src="${el.src}" alt="${el.description}">`);
       });
 
       return `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destination.description}</p>
+        ${destination.description ? `<p class="event__destination-description">${destination.description}</p>` : ``}
         <div class="event__photos-container">
           <div class="event__photos-tape">
             ${photosList.join(``)}
@@ -204,19 +207,19 @@ export default class CreateEventPoint extends SmartView {
   _changePointTypeHandler(evt) {
     evt.preventDefault();
 
-    let i = POINTS.findIndex((el) => el.typeOfPoint.toLowerCase() === evt.target.value);
-
-    if (POINTS[i].offers !== null) {
-      POINTS[i].offers.forEach((el) => (el.isChecked = false));
+    let i = OFFERS.findIndex((el) => el.type === evt.target.value);
+/*
+    if (OFFERS[i].offers !== null) {
+      OFFERS[i].offers.forEach((el) => (el.isChecked = false));
     }
-
+*/
     let typeName = evt.target.value.charAt(0).toUpperCase() + evt.target.value.slice(1);
 
     this.updateData({
       pointType: Object.assign(
           {},
           {typeOfPoint: typeName},
-          {offers: POINTS[i].offers}
+          {offers: OFFERS[i].offers}
       )
     });
   }
@@ -225,14 +228,16 @@ export default class CreateEventPoint extends SmartView {
     evt.preventDefault();
 
     let selectedValue = evt.target.options[evt.target.selectedIndex].value;
-    let i = DESTINATIONS.findIndex((el) => el.title === selectedValue);
+    let i = DESTINATIONS.findIndex((el) => el.name === selectedValue);
+
+    console.log(selectedValue)
 
     this.updateData({
       destination: Object.assign(
           {},
           {title: selectedValue},
           {description: DESTINATIONS[i].description},
-          {photos: DESTINATIONS[i].photos}
+          {photos: DESTINATIONS[i].pictures}
       )
     });
   }

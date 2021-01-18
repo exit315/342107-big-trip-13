@@ -10,11 +10,11 @@ const createEventPointTemplate = (eventPoint) => {
 
   if (pointType.offers !== null) {
     pointType.offers.forEach((el) => {
-      offersList.push(`${el.isChecked ? `<li class="event__offer">
+      offersList.push(`<li class="event__offer">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${el.price}</span>
-    </li>` : ``}`);
+    </li>`);
       return offersList;
     });
   }
