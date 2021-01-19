@@ -2,9 +2,11 @@ import {render, RenderPosition, remove} from "./utils/render.js";
 import {MenuItem, UpdateType, FilterType} from "./utils/const.js";
 import SiteMenuView from "./view/site-menu.js";
 import TripInfoView from "./view/trip-info.js";
-import AddNewPointBtn from "./view/add-point-btn.js";
+import AddNewPointBtnView from "./view/add-point-btn.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
+import OffersModel from "./model/offers.js";
+import DestinationsModel from "./model/destinations.js";
 import TripPresenter from "./presenter/trip.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticsView from "./view/statistics.js";
@@ -23,11 +25,14 @@ const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
+
 const tripInfo = new TripInfoView();
-const addNewPointBtn = new AddNewPointBtn();
+const addNewPointBtn = new AddNewPointBtnView();
 const siteMenu = new SiteMenuView();
 const filterPresenter = new FilterPresenter(siteMenuControls, filterModel);
-const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, api);
+const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, destinationsModel, offersModel, api);
 
 let statisticsComponent = null;
 
@@ -88,6 +93,8 @@ export const DESTINATIONS = [];
 
 api.getDestinations()
   .then((destinations) => {
+    destinationsModel.setDestinations(UpdateType.MINOR, destinations);
+
     destinations.map((destination) => DESTINATIONS.push(destination));
   });
 
@@ -95,5 +102,10 @@ export const OFFERS = [];
 
 api.getOffers()
   .then((offers) => {
+    offersModel.setOffers(UpdateType.MINOR, offers);
+
     offers.map((offer) => OFFERS.push(offer));
   });
+
+
+  

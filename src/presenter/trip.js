@@ -11,9 +11,12 @@ import PointPresenter from "./point.js";
 import PointNewPresenter from "./point-new.js";
 
 export default class Trip {
-  constructor(eventsComponent, pointsModel, filterModel, api) {
+  constructor(eventsComponent, pointsModel, filterModel, offersModel, destinationsModel, api) {
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
+
     this._eventsComponent = eventsComponent; // .trip-events
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
@@ -38,6 +41,8 @@ export default class Trip {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._offersModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
 
     this._renderTripBoard();
   }
@@ -50,6 +55,8 @@ export default class Trip {
 
     this._pointsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
+    this._offersModel.removeObserver(this._handleModelEvent);
+    this._destinationsModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint(callback) {
@@ -58,6 +65,7 @@ export default class Trip {
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
+
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[filterType](points);
 
@@ -147,10 +155,12 @@ export default class Trip {
     render(this._eventsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderPoint(eventPoint) {
+  _renderPoint(point) {
+    /*offers = this._offersModel.getOffers()*/
+    
     const pointPresenter = new PointPresenter(this._eventsListComponent, this._handleViewAction, this._handleModeChange);
-    pointPresenter.init(eventPoint);
-    this._pointPresenter[eventPoint.id] = pointPresenter;
+    pointPresenter.init(point /*offers*/);
+    this._pointPresenter[point.id] = pointPresenter;
   }
 
   _renderPointsList(points) {
@@ -186,7 +196,9 @@ export default class Trip {
       return;
     }
 
+    const points = this._getPoints();
+
     this._renderSort();
-    this._renderPointsList(this._getPoints());
+    this._renderPointsList(points);
   }
 }

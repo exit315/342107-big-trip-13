@@ -12,17 +12,15 @@ const createEditEventFormTemplate = (data) => {
 
   const pointTypesList = [];
   OFFERS.forEach((el) => {
-    let itemName = el.type.charAt(0).toUpperCase() + el.type.slice(1);
-
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
-      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${itemName}</label>
+      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type}</label>
     </div>`);
   });
 
   const destinationsList = [];
   DESTINATIONS.forEach((el) => {
-    destinationsList.push(`<option value="${el.name}">${el.name}</option>`);
+    destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
   });
 
   const createPointOffersTemplate = () => {
@@ -136,10 +134,12 @@ const createEditEventFormTemplate = (data) => {
 };
 
 export default class EditEventPoint extends SmartView {
-  constructor(eventPoint) {
+  constructor(eventPoint /*offers*/) {
     super();
     this._data = EditEventPoint.parseEventToData(eventPoint);
     this._datepicker = null;
+
+    /*this._offers = offers*/
 
     this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
     this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
@@ -153,6 +153,15 @@ export default class EditEventPoint extends SmartView {
 
     this._setInnerHandlers();
     this._setDatepicker();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
   }
 
   reset(eventPoint) {
