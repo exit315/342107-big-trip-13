@@ -10,6 +10,8 @@
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
+    "chart.js": "2.9.4",
+    "chartjs-plugin-datalabels": "0.7.0",
     "css-loader": "5.0.1",
     "cssnano": "4.1.10",
     "dayjs": "1.9.5",
@@ -26,8 +28,5 @@
   "engines": {
     "node": "10"
   },
-  "dependencies": {
-    "chart.js": "2.9.4",
-    "chartjs-plugin-datalabels": "0.7.0"
-  }
+  "dependencies": {}
 }

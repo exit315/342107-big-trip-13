@@ -1,33 +1,45 @@
 import dayjs from "dayjs";
 import moment from "moment";
-
+import {generateDuration} from "../utils/utils.js";
 import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
-  const {pointType, destination, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
+  const {pointType, destination, dateEnd, dateBegin, isFavorite, price} = eventPoint;
+
+  const timeBegin = dayjs(dateBegin).format(`HH:MM`);
+  const timeEnd = dayjs(dateEnd).format(`HH:MM`);
 
   const offersList = [];
-
   if (pointType.offers !== null) {
     pointType.offers.forEach((el) => {
-      offersList.push(`<li class="event__offer">
+      offersList.push(`${el.isChecked ? `<li class="event__offer">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${el.price}</span>
-    </li>`);
+    </li>` : ``}`);
       return offersList;
     });
   }
 
-  const eventDuration = moment.duration(duration);
+  const createEventDurationTemplate = () => {
+    const eventDuration = moment.duration(generateDuration(dayjs(dateBegin), dayjs(dateEnd)));
+    const days = eventDuration._data.days;
+    const hours = eventDuration._data.hours;
+    const minutes = eventDuration._data.minutes;
 
-  const days = eventDuration._data.days;
-  const hours = eventDuration._data.hours;
-  const minutes = eventDuration._data.minutes;
+    if (days === 0) {
+      return `${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
+      ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else if (days === 0 && hours === 0) {
+      return `${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else {
+      return `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
+      ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
+      ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    }
+  };
 
-  const eventDurationTemplate = `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
-  ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
-  ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+  const eventDurationTemplate = createEventDurationTemplate();
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -38,9 +50,9 @@ const createEventPointTemplate = (eventPoint) => {
       <h3 class="event__title">${pointType.typeOfPoint} ${destination.title}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time">${dayjs(timeBegin).format(`HH:MM`)}</time>
+          <time class="event__start-time">${timeBegin}</time>
           &mdash;
-          <time class="event__end-time">${dayjs(timeEnd).format(`HH:MM`)}</time>
+          <time class="event__end-time">${timeEnd}</time>
         </p>
         <p class="event__duration">${eventDurationTemplate}</p>
       </div>

@@ -12,15 +12,17 @@ const createEditEventFormTemplate = (data) => {
 
   const pointTypesList = [];
   OFFERS.forEach((el) => {
+    let itemName = el.type.charAt(0).toUpperCase() + el.type.slice(1);
+
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
-      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type}</label>
+      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${itemName}</label>
     </div>`);
   });
 
   const destinationsList = [];
   DESTINATIONS.forEach((el) => {
-    destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
+    destinationsList.push(`<option value="${el.name}">${el.name}</option>`);
   });
 
   const createPointOffersTemplate = () => {
