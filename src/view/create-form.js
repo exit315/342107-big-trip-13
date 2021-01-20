@@ -21,9 +21,6 @@ const NEW_EVENT_POINT = {
 export const createNewEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price, timeBegin, timeEnd} = data;
 
-  console.log(offers)
-  console.log(destinations)
-
   const pointTypesList = [];
   offers.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
