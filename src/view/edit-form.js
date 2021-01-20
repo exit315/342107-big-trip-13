@@ -134,12 +134,12 @@ const createEditEventFormTemplate = (data) => {
 };
 
 export default class EditEventPoint extends SmartView {
-  constructor(eventPoint /*offers*/) {
+  constructor(eventPoint /* offers*/) {
     super();
     this._data = EditEventPoint.parseEventToData(eventPoint);
     this._datepicker = null;
 
-    /*this._offers = offers*/
+    /* this._offers = offers*/
 
     this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
     this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);

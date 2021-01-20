@@ -106,6 +106,3 @@ api.getOffers()
 
     offers.map((offer) => OFFERS.push(offer));
   });
-
-
-  
