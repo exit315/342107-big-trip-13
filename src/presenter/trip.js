@@ -60,7 +60,10 @@ export default class Trip {
   }
 
   createPoint(callback) {
-    this._pointNewPresenter.init(callback);
+    const offers = this._offersModel.getOffers();
+    const destinations = this._destinationsModel.getDestinations();
+
+    this._pointNewPresenter.init(callback, offers, destinations);
   }
 
   _getPoints() {
@@ -156,10 +159,11 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    /* offers = this._offersModel.getOffers()*/
+    const offers = this._offersModel.getOffers();
+    const destinations = this._destinationsModel.getDestinations();
 
     const pointPresenter = new PointPresenter(this._eventsListComponent, this._handleViewAction, this._handleModeChange);
-    pointPresenter.init(point /* offers*/);
+    pointPresenter.init(point, offers, destinations);
     this._pointPresenter[point.id] = pointPresenter;
   }
 

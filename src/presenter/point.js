@@ -21,13 +21,13 @@ export default class Point {
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
-  init(eventPoint, offers) {
+  init(eventPoint, offers, destinations) {
     this._eventPoint = eventPoint;
     const prevEventComponent = this._eventComponent;
     const prevEventEditComponent = this._eventEditComponent;
 
-    this._eventComponent = new EventPointView(eventPoint, offers);
-    this._eventEditComponent = new EditEventPointView(eventPoint, offers);
+    this._eventComponent = new EventPointView(eventPoint);
+    this._eventEditComponent = new EditEventPointView(eventPoint, offers, destinations);
 
     this._eventComponent.setEditClickHandler(this._editClickHandler);
     this._eventEditComponent.setClickHandler(this._clickHandler);

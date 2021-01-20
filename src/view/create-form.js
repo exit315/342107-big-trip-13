@@ -18,11 +18,14 @@ const NEW_EVENT_POINT = {
   duration: ``
 };
 
-export const createNewEventFormTemplate = (data) => {
+export const createNewEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price, timeBegin, timeEnd} = data;
 
+  console.log(offers)
+  console.log(destinations)
+
   const pointTypesList = [];
-  OFFERS.forEach((el) => {
+  offers.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
       <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type}</label>
@@ -30,8 +33,8 @@ export const createNewEventFormTemplate = (data) => {
   });
 
   const destinationsList = [];
-  DESTINATIONS.forEach((el) => {
-    destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
+  destinations.forEach((el) => {
+    destinationsList.push(`<option value="${el.name}">${el.name}</option>`);
   });
 
   const createPointOffersTemplate = () => {
@@ -65,7 +68,6 @@ export const createNewEventFormTemplate = (data) => {
 
   const createPointDestinationDescriptionTemplate = () => {
     const photosList = [];
-
 
     if (destination.photos !== null) {
       destination.photos.forEach((el) => {
@@ -143,10 +145,13 @@ export const createNewEventFormTemplate = (data) => {
 };
 
 export default class CreateEventPoint extends SmartView {
-  constructor(eventPoint = NEW_EVENT_POINT) {
+  constructor(eventPoint = NEW_EVENT_POINT, offers, destinations) {
     super();
     this._data = CreateEventPoint.parseEventToData(eventPoint);
     this._datepicker = null;
+
+    this._offers = offers;
+    this._destinations = destinations;
 
     this._submitFormHandler = this._submitFormHandler.bind(this);
     this._canselClickHandler = this._canselClickHandler.bind(this);
@@ -169,7 +174,7 @@ export default class CreateEventPoint extends SmartView {
   }
 
   getTemplate() {
-    return createNewEventFormTemplate(this._data);
+    return createNewEventFormTemplate(this._data, this._offers, this._destinations);
   }
 
   _setInnerHandlers() {

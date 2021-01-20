@@ -32,7 +32,7 @@ const tripInfo = new TripInfoView();
 const addNewPointBtn = new AddNewPointBtnView();
 const siteMenu = new SiteMenuView();
 const filterPresenter = new FilterPresenter(siteMenuControls, filterModel);
-const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, destinationsModel, offersModel, api);
+const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, offersModel, destinationsModel, api);
 
 let statisticsComponent = null;
 

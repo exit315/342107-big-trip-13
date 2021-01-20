@@ -15,14 +15,14 @@ export default class PointNew {
     this._canselClickHandler = this._canselClickHandler.bind(this);
   }
 
-  init(callback) {
+  init(callback, offers, destinations) {
     this._destroyCallback = callback;
 
     if (this._eventCreateComponent !== null) {
       return;
     }
 
-    this._eventCreateComponent = new PointNewView();
+    this._eventCreateComponent = new PointNewView(offers, destinations);
     this._eventCreateComponent.setSubmitFormHandler(this._submitFormHandler);
     this._eventCreateComponent.setCanselClickHandler(this._canselClickHandler);
 
