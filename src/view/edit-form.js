@@ -7,11 +7,11 @@ import SmartView from "./smart.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const createEditEventFormTemplate = (data) => {
+const createEditEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price} = data;
 
   const pointTypesList = [];
-  OFFERS.forEach((el) => {
+  offers.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
       <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type}</label>
@@ -19,7 +19,7 @@ const createEditEventFormTemplate = (data) => {
   });
 
   const destinationsList = [];
-  DESTINATIONS.forEach((el) => {
+  destinations.forEach((el) => {
     destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
   });
 
@@ -134,12 +134,13 @@ const createEditEventFormTemplate = (data) => {
 };
 
 export default class EditEventPoint extends SmartView {
-  constructor(eventPoint /*offers*/) {
+  constructor(eventPoint, offers, destinations) {
     super();
     this._data = EditEventPoint.parseEventToData(eventPoint);
     this._datepicker = null;
 
-    /*this._offers = offers*/
+    this._offers = offers;
+    this._destinations = destinations;
 
     this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
     this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
@@ -171,7 +172,7 @@ export default class EditEventPoint extends SmartView {
   }
 
   getTemplate() {
-    return createEditEventFormTemplate(this._data);
+    return createEditEventFormTemplate(this._data, this._offers, this._destinations);
   }
 
   _setInnerHandlers() {
@@ -210,7 +211,6 @@ export default class EditEventPoint extends SmartView {
     evt.preventDefault();
 
     let i = OFFERS.findIndex((el) => el.type === evt.target.value);
-
     this.updateData({
       pointType: Object.assign(
           {},
