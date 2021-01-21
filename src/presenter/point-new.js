@@ -22,7 +22,7 @@ export default class PointNew {
       return;
     }
 
-    this._eventCreateComponent = new PointNewView(offers, destinations);
+    this._eventCreateComponent = new PointNewView(undefined, offers, destinations);
     this._eventCreateComponent.setSubmitFormHandler(this._submitFormHandler);
     this._eventCreateComponent.setCanselClickHandler(this._canselClickHandler);
 
