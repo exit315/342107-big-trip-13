@@ -1,6 +1,5 @@
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/const.js";
-import {generateId} from "../utils/utils.js";
 import PointNewView from "../view/create-form.js";
 
 export default class PointNew {
@@ -57,11 +56,11 @@ export default class PointNew {
     this.destroy();
   }
 
-  _submitFormHandler(eventPointNew) {
+  _submitFormHandler(eventPoint) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        Object.assign({id: generateId()}, eventPointNew)
+        eventPoint
     );
     this.destroy();
   }

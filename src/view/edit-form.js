@@ -8,10 +8,11 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price} = data;
 
   const pointTypesList = [];
+
   offers.forEach((el) => {
     pointTypesList.push(`<div class="event__type-item">
       <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
-      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type}</label>
+      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type.charAt(0).toUpperCase() + el.type.slice(1)}</label>
     </div>`);
   });
 
@@ -21,9 +22,9 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
   });
 
   const createPointOffersTemplate = () => {
-    const offersList = [];
+    if (pointType.offers !== null && pointType.offers.length !== 0) {
+      const offersList = [];
 
-    if (pointType.offers !== null) {
       let i = 1;
 
       pointType.offers.forEach((el) => {

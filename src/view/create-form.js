@@ -1,23 +1,20 @@
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
-import {DESTINATIONS} from "../main.js";
-import {OFFERS} from "../main.js";
 import SmartView from "./smart.js";
+
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const NEW_EVENT_POINT = {
-  pointType: {typeOfPoint: `Flight`, offers: null},
+  pointType: {typeOfPoint: `flight`, offers: []},
   destination: {title: ``, description: null, photos: null},
-  dateBegin: dayjs(),
-  dateEnd: dayjs(),
-  timeBegin: dayjs(),
-  timeEnd: dayjs(),
+  dateBegin: new Date(),
+  dateEnd: new Date(),
   price: ``,
-  isFavorite: false,
+  isFavorite: false
 };
 
 export const createNewEventFormTemplate = (data, offers, destinations) => {
-  const {pointType, destination, dateBegin, dateEnd, price, timeBegin, timeEnd} = data;
+  const {pointType, destination, dateBegin, dateEnd, price} = data;
 
   const pointTypesList = [];
   offers.forEach((el) => {
@@ -29,18 +26,18 @@ export const createNewEventFormTemplate = (data, offers, destinations) => {
 
   const destinationsList = [];
   destinations.forEach((el) => {
-    destinationsList.push(`<option value="${el.name}">${el.name}</option>`);
+    destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
   });
 
   const createPointOffersTemplate = () => {
-    const offersList = [];
+    if (pointType.offers !== null && pointType.offers.length !== 0) {
+      const offersList = [];
 
-    if (pointType.offers !== null) {
       let i = 1;
 
       pointType.offers.forEach((el) => {
         offersList.push(`<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" data-type="${pointType.typeOfPoint + i}">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" ${el.isChecked ? `checked` : ``}>
           <label class="event__offer-label" for="event-offer-${pointType.typeOfPoint + i}">
             <span class="event__offer-title">${el.title}</span>
             &plus;&euro;&nbsp;
@@ -115,10 +112,10 @@ export const createNewEventFormTemplate = (data, offers, destinations) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
-        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY`) + ` ` + dayjs(timeBegin).format(`HH:MM`)}">
+        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time">To</label>
-        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY`) + ` ` + dayjs(timeEnd).format(`HH:MM`)}">
+        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -148,15 +145,14 @@ export default class CreateEventPoint extends SmartView {
     this._offers = offers;
     this._destinations = destinations;
 
-    this._submitFormHandler = this._submitFormHandler.bind(this);
-    this._canselClickHandler = this._canselClickHandler.bind(this);
-
     this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
     this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
     this._changePointOfferHandler = this._changePointOfferHandler.bind(this);
     this._changePointPriceHandler = this._changePointPriceHandler.bind(this);
+    this._submitFormHandler = this._submitFormHandler.bind(this);
+    this._canselClickHandler = this._canselClickHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -192,29 +188,26 @@ export default class CreateEventPoint extends SmartView {
 
   _changeDateEventBeginHandler([userDate]) {
     this.updateData({
-      dateBegin: dayjs(userDate),
-      timeBegin: dayjs(userDate)
+      dateBegin: userDate
     }, true);
   }
 
   _changeDateEventEndHandler([userDate]) {
     this.updateData({
-      dateEnd: dayjs(userDate),
-      timeEnd: dayjs(userDate)
+      dateEnd: userDate
     }, true);
   }
 
   _changePointTypeHandler(evt) {
     evt.preventDefault();
 
-    let i = OFFERS.findIndex((el) => el.type === evt.target.value);
-    let typeName = evt.target.value.charAt(0).toUpperCase() + evt.target.value.slice(1);
+    let i = this._offers.findIndex((el) => el.type === evt.target.value);
 
     this.updateData({
       pointType: Object.assign(
           {},
-          {typeOfPoint: typeName},
-          {offers: OFFERS[i].offers}
+          {typeOfPoint: evt.target.value},
+          {offers: this._offers[i].offers}
       )
     });
   }
@@ -223,14 +216,14 @@ export default class CreateEventPoint extends SmartView {
     evt.preventDefault();
 
     let selectedValue = evt.target.options[evt.target.selectedIndex].value;
-    let i = DESTINATIONS.findIndex((el) => el.name === selectedValue);
+    let i = this._destinations.findIndex((el) => el.name === selectedValue);
 
     this.updateData({
       destination: Object.assign(
           {},
           {title: selectedValue},
-          {description: DESTINATIONS[i].description},
-          {photos: DESTINATIONS[i].pictures}
+          {description: this._destinations[i].description},
+          {photos: this._destinations[i].pictures}
       )
     });
   }
@@ -256,8 +249,9 @@ export default class CreateEventPoint extends SmartView {
   _changePointPriceHandler(evt) {
     evt.preventDefault();
 
+
     this.updateData({
-      price: evt.target.value
+      price: Number(evt.target.value)
     }, true);
   }
 
