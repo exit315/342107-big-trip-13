@@ -17,13 +17,13 @@ export default class Trip {
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
 
-    this._eventsComponent = eventsComponent; // .trip-events
+    this._eventsComponent = eventsComponent;
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
     this._isLoading = true;
     this._api = api;
 
-    this._eventsListComponent = new EventsListView(); // .trip-events__list
+    this._eventsListComponent = new EventsListView();
     this._sortComponent = new SortView();
     this._noPointsComponent = new NoPointsView();
     this._loadingComponent = new LoadingView();

@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import flatpickr from "flatpickr";
 import {DESTINATIONS} from "../main.js";
 import {OFFERS} from "../main.js";
-import {generateDuration} from "../utils/utils.js";
 import SmartView from "./smart.js";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -15,7 +14,6 @@ const NEW_EVENT_POINT = {
   timeEnd: dayjs(),
   price: ``,
   isFavorite: false,
-  duration: ``
 };
 
 export const createNewEventFormTemplate = (data, offers, destinations) => {
@@ -271,10 +269,6 @@ export default class CreateEventPoint extends SmartView {
 
   _submitFormHandler(evt) {
     evt.preventDefault();
-
-    this.updateData({
-      duration: generateDuration(this._data.dateBegin, this._data.dateEnd)
-    }, true);
 
     this._callback.submitClick(CreateEventPoint.parseDataToEvent(this._data));
     document.querySelector(`.trip-main__event-add-btn`).disabled = false;

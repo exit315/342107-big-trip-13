@@ -70,7 +70,8 @@ export default class Points extends Observer {
           },
           destination: {
             title: point.destination.name,
-            photos: point.destination.pictures
+            photos: point.destination.pictures,
+            description: point.destination.description
           },
           isFavorite: point.is_favorite
         }
@@ -98,8 +99,14 @@ export default class Points extends Observer {
           "base_price": point.price,
           "offers": point.pointType.offers,
           "type": point.pointType.typeOfPoint,
-          "destination.name": point.destination.title,
-          "destination.pictures": point.destination.photos,
+          "destination": Object.assign(
+              {},
+              point.destination,
+              {
+                name: point.destination.title,
+                pictures: point.destination.photos,
+                description: point.destination.description
+              }),
           "is_favorite": point.isFavorite
         }
     );
@@ -107,10 +114,9 @@ export default class Points extends Observer {
     delete adaptedPoint.dateBegin;
     delete adaptedPoint.dateEnd;
     delete adaptedPoint.price;
-    delete adaptedPoint.pointType.offers;
-    delete adaptedPoint.pointType.typeOfPoint;
-    delete adaptedPoint.destination.title;
+    delete adaptedPoint.pointType;
     delete adaptedPoint.destination.photos;
+    delete adaptedPoint.destination.title;
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;

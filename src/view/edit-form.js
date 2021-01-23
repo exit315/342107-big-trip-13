@@ -1,8 +1,5 @@
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
-import {DESTINATIONS} from "../main.js";
-import {OFFERS} from "../main.js";
-import {generateDuration} from "../utils/utils.js";
 import SmartView from "./smart.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -195,27 +192,27 @@ export default class EditEventPoint extends SmartView {
 
   _changeDateEventBeginHandler([userDate]) {
     this.updateData({
-      dateBegin: dayjs(userDate),
-      timeBegin: dayjs(userDate)
+      dateBegin: userDate,
+      timeBegin: userDate
     }, true);
   }
 
   _changeDateEventEndHandler([userDate]) {
     this.updateData({
-      dateEnd: dayjs(userDate),
-      timeEnd: dayjs(userDate)
+      dateEnd: userDate,
+      timeEnd: userDate
     }, true);
   }
 
   _changePointTypeHandler(evt) {
     evt.preventDefault();
 
-    let i = OFFERS.findIndex((el) => el.type === evt.target.value);
+    let i = this._offers.findIndex((el) => el.type === evt.target.value);
     this.updateData({
       pointType: Object.assign(
           {},
           {typeOfPoint: evt.target.value},
-          {offers: OFFERS[i].offers}
+          {offers: this._offers[i].offers}
       )
     });
   }
@@ -223,14 +220,14 @@ export default class EditEventPoint extends SmartView {
   _changePointDestinationHandler(evt) {
     evt.preventDefault();
 
-    let i = DESTINATIONS.findIndex((el) => el.name === evt.target.value);
+    let i = this._destinations.findIndex((el) => el.name === evt.target.value);
 
     this.updateData({
       destination: Object.assign(
           {},
           {title: evt.target.value},
-          {description: DESTINATIONS[i].description},
-          {photos: DESTINATIONS[i].pictures}
+          {description: this._destinations[i].description},
+          {photos: this._destinations[i].pictures}
       )
     });
   }
@@ -272,10 +269,6 @@ export default class EditEventPoint extends SmartView {
 
   _submitFormHandler(evt) {
     evt.preventDefault();
-
-    this.updateData({
-      duration: generateDuration(this._data.dateBegin, this._data.dateEnd)
-    }, true);
 
     this._callback.submitClick(EditEventPoint.parseDataToEvent(this._data));
   }

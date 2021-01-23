@@ -118,7 +118,7 @@ export default class Point {
   _submitFormHandler(eventPoint) {
     this._changeData(
         UserAction.UPDATE_POINT,
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         eventPoint
     );
     this._replaceFormToCard();
