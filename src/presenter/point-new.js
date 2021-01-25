@@ -8,7 +8,8 @@ export default class PointNew {
     this._changeData = changeData;
 
     this._eventCreateComponent = null;
-
+    this._destroyCallback = null;
+    
     this._submitFormHandler = this._submitFormHandler.bind(this);
     this._escDownHandler = this._escDownHandler.bind(this);
     this._canselClickHandler = this._canselClickHandler.bind(this);
@@ -45,6 +46,24 @@ export default class PointNew {
     document.removeEventListener(`keydown`, this._escDownHandler);
   }
 
+  setSaving() {
+    this._eventCreateComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._eventCreateComponent.updateData({
+        isDisabled: false,
+        isSaving: false
+      });
+    };
+
+    this._eventCreateComponent.shake(resetFormState);
+  }
+
   _escDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
@@ -62,6 +81,5 @@ export default class PointNew {
         UpdateType.MINOR,
         eventPoint
     );
-    this.destroy();
   }
 }

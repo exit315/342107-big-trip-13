@@ -5,23 +5,30 @@ import SmartView from "./smart.js";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEditEventFormTemplate = (data, offers, destinations) => {
-  const {pointType, destination, dateBegin, dateEnd, price} = data;
+  const {pointType, destination, dateBegin, dateEnd, price, isDisabled, isSaving, isDeleting} = data;
 
-  const pointTypesList = [];
+  const createPointTypesListTemplate = (isDisabled) => {
+    const pointTypesList = [];
+    offers.forEach((el) => {
+      pointTypesList.push(`<div class="event__type-item">
+        <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}" ${isDisabled ? `disabled` : ``}>
+        <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type.charAt(0).toUpperCase() + el.type.slice(1)}</label>
+      </div>`);
+    });
 
-  offers.forEach((el) => {
-    pointTypesList.push(`<div class="event__type-item">
-      <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}">
-      <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type.charAt(0).toUpperCase() + el.type.slice(1)}</label>
-    </div>`);
-  });
+    return pointTypesList.join(``);
+  }
 
-  const destinationsList = [];
-  destinations.forEach((el) => {
-    destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
-  });
+  const createDestinationsListTemplate = () => {
+    const destinationsList = [];
+    destinations.forEach((el) => {
+      destinationsList.push(`<option value="${el.name}" ${el.name === destination.title ? `selected` : ``}>${el.name}</option>`);
+    });
 
-  const createPointOffersTemplate = () => {
+    return destinationsList.join(``);
+  }
+
+  const createPointOffersTemplate = (isDisabled) => {
     if (pointType.offers !== null && pointType.offers.length !== 0) {
       const offersList = [];
 
@@ -29,7 +36,7 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
 
       pointType.offers.forEach((el) => {
         offersList.push(`<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" ${el.isChecked ? `checked` : ``}>
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" ${el.isChecked ? `checked` : ``} ${data.isDisabled ? `disabled` : ``}>
           <label class="event__offer-label" for="event-offer-${pointType.typeOfPoint + i}">
             <span class="event__offer-title">${el.title}</span>
             &plus;&euro;&nbsp;
@@ -72,7 +79,9 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
     }
   };
 
-  const pointOffersTemplate = createPointOffersTemplate(pointType);
+  const pointTypesListTemplate = createPointTypesListTemplate(isDisabled);
+  const destinationsListTemplate = createDestinationsListTemplate();
+  const pointOffersTemplate = createPointOffersTemplate(pointType, isDisabled);
   const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
 
   return `<form class="event event--edit" action="#" method="post">
@@ -82,12 +91,12 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${pointType.typeOfPoint}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle" type="checkbox" ${isDisabled ? `disabled` : ``}>
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${pointTypesList.join(``)}
+            ${pointTypesListTemplate}
           </fieldset>
         </div>
       </div>
@@ -98,16 +107,16 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
         </label>
         <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
           <option>${destination.title}</option>
-          ${destinationsList.join(``)}
+          ${destinationsListTemplate}
         </select>
       </div>
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
-        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}" ${isDisabled ? `disabled` : ``}>
         &mdash;
         <label class="visually-hidden" for="event-end-time">To</label>
-        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}" ${isDisabled ? `disabled` : ``}>
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -115,11 +124,11 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" value="${price}">
+        <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" value="${price}" ${isDisabled ? `disabled` : ``}>
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
+      <button class="event__save-btn btn btn--blue" type="submit">${isSaving ? `Saving...` : `Save`}</button>
+      <button class="event__reset-btn" type="reset">${isDeleting ? `Deleting...` : `Delete`}</button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
@@ -193,15 +202,13 @@ export default class EditEventPoint extends SmartView {
 
   _changeDateEventBeginHandler([userDate]) {
     this.updateData({
-      dateBegin: userDate,
-      timeBegin: userDate
+      dateBegin: userDate
     }, true);
   }
 
   _changeDateEventEndHandler([userDate]) {
     this.updateData({
-      dateEnd: userDate,
-      timeEnd: userDate
+      dateEnd: userDate
     }, true);
   }
 
@@ -333,12 +340,21 @@ export default class EditEventPoint extends SmartView {
   static parseEventToData(eventPoint) {
     return Object.assign(
         {},
-        eventPoint
+        eventPoint,
+        {
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
+        }
     );
   }
 
   static parseDataToEvent(data) {
     data = Object.assign({}, data);
+    
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
 
     return data;
   }

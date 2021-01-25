@@ -1,18 +1,18 @@
 import moment from "moment";
-
+import dayjs from "dayjs";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import SmartView from "./smart.js";
-import {makeItemsUniq, calcSum} from "../utils/utils.js";
+import {makeItemsUniq, calcSum, generateDuration} from "../utils/utils.js";
 
 const renderMoneyChart = (moneyCtx, points) => {
   const pointTypes = points.map((point) => point.pointType.typeOfPoint);
-  const uniqPointTypes = makeItemsUniq(pointTypes);
+  const uniqPointTypes = makeItemsUniq(pointTypes).map((el) => el.toUpperCase());
   const moneyForPoints = [];
 
   for (let i = 0; i < uniqPointTypes.length; i++) {
     moneyForPoints.push(points.reduce((newArr, point)=> {
-      if (point.pointType.typeOfPoint === uniqPointTypes[i]) {
+      if (point.pointType.typeOfPoint === uniqPointTypes[i].toLowerCase()) {
         let moneyValue = +(point.price);
         newArr.push(moneyValue);
       }
@@ -90,14 +90,14 @@ const renderMoneyChart = (moneyCtx, points) => {
 
 const renderTypeChart = (typeCtx, points) => {
   const pointTypes = points.map((point) => point.pointType.typeOfPoint);
-  const uniqPointTypes = makeItemsUniq(pointTypes);
+  const uniqPointTypes = makeItemsUniq(pointTypes).map((el) => el.toUpperCase());
 
   const typeForPoints = [];
   const typeSum = [];
 
   for (let i = 0; i < uniqPointTypes.length; i++) {
     typeForPoints.push(points.reduce((newArr, point)=> {
-      if (point.pointType.typeOfPoint === uniqPointTypes[i]) {
+      if (point.pointType.typeOfPoint === uniqPointTypes[i].toLowerCase()) {
         newArr.push(point);
       }
       return newArr;
@@ -176,13 +176,14 @@ const renderTypeChart = (typeCtx, points) => {
 
 const renderTimeChart = (timeCtx, points) => {
   const pointTypes = points.map((point) => point.pointType.typeOfPoint);
-  const uniqPointTypes = makeItemsUniq(pointTypes);
+  const uniqPointTypes = makeItemsUniq(pointTypes).map((el) => el.toUpperCase());
 
   const timeForPoints = [];
   for (let i = 0; i < uniqPointTypes.length; i++) {
     timeForPoints.push(points.reduce((newArr, point)=> {
-      if (point.pointType.typeOfPoint === uniqPointTypes[i]) {
-        newArr.push(point.duration);
+      if (point.pointType.typeOfPoint === uniqPointTypes[i].toLowerCase()) {
+        let duration = generateDuration(dayjs(point.dateBegin), dayjs(point.dateEnd))
+        newArr.push(duration);
       }
       return newArr;
     }, []));
@@ -192,6 +193,7 @@ const renderTimeChart = (timeCtx, points) => {
 
   const timeChart = [];
   timeSum.forEach((time) => {
+    
     const daysDuration = moment.duration(time);
     const days = daysDuration._data.days;
 

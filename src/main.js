@@ -14,14 +14,15 @@ import Api from "./api.js";
 
 const AUTHORIZATION = `Basic jhykf545ghtxaqmlpz7545s5i`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const api = new Api(END_POINT, AUTHORIZATION);
+
+let statisticsComponent = null;
 
 const headerElement = document.querySelector(`.page-header`);
 const siteMenuWrapper = headerElement.querySelector(`.trip-main`);
 const siteMenuControls = siteMenuWrapper.querySelector(`.trip-controls`);
 const mainElement = document.querySelector(`.page-main`);
 const eventsComponent = mainElement.querySelector(`.trip-events`);
-
-const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
@@ -34,18 +35,18 @@ const siteMenu = new SiteMenuView();
 const filterPresenter = new FilterPresenter(siteMenuControls, filterModel);
 const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, offersModel, destinationsModel, api);
 
-let statisticsComponent = null;
-
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statisticsComponent);
       eventsComponent.classList.remove(`trip-events--hidden`);
+      siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = false;
       siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
       siteMenu.getElement().querySelector(`.${MenuItem.STATS.toLowerCase()}`).classList.remove(`trip-tabs__btn--active`);
       break;
     case MenuItem.STATS:
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = true;
       render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
       eventsComponent.classList.add(`trip-events--hidden`);
       siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.remove(`trip-tabs__btn--active`);
@@ -63,7 +64,6 @@ const handleNewPointFormOpen = () => {
   tripPresenter.destroy();
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   tripPresenter.init();
-
   tripPresenter.createPoint(handleNewPointFormClose);
   siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = true;
   siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
@@ -89,20 +89,12 @@ api.getPoints()
     siteMenu.setMenuClickHandler(handleSiteMenuClick);
   });
 
-export const DESTINATIONS = [];
-
 api.getDestinations()
   .then((destinations) => {
     destinationsModel.setDestinations(UpdateType.MINOR, destinations);
-
-    destinations.map((destination) => DESTINATIONS.push(destination));
   });
-
-export const OFFERS = [];
 
 api.getOffers()
   .then((offers) => {
     offersModel.setOffers(UpdateType.MINOR, offers);
-
-    offers.map((offer) => OFFERS.push(offer));
   });

@@ -24,6 +24,12 @@ export const UpdateType = {
   INIT: `INIT`
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`
+};
+
 export const FilterType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,

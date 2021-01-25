@@ -1,5 +1,5 @@
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
-import {Mode, UserAction, UpdateType} from "../utils/const.js";
+import {Mode, UserAction, UpdateType, State} from "../utils/const.js";
 import EditEventPointView from "../view/edit-form.js";
 import EventPointView from "../view/event-point.js";
 
@@ -45,7 +45,8 @@ export default class Point {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._eventEditComponent, prevEventEditComponent);
+      replace(this._eventComponent, prevEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevEventComponent);
@@ -60,6 +61,35 @@ export default class Point {
   resetEventPointView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToCard();
+    }
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._eventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        this._eventComponent.shake(resetFormState);
+        this._eventEditComponent.shake(resetFormState);
+        break;
     }
   }
 
@@ -121,6 +151,5 @@ export default class Point {
         UpdateType.MINOR,
         eventPoint
     );
-    this._replaceFormToCard();
   }
 }
