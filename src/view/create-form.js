@@ -16,17 +16,17 @@ const NEW_EVENT_POINT = {
 export const createNewEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price, isDisabled, isSaving} = data;
 
-  const createPointTypesListTemplate = (isDisabled) => {
+  const createPointTypesListTemplate = () => {
     const pointTypesList = [];
     offers.forEach((el) => {
       pointTypesList.push(`<div class="event__type-item">
         <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}" ${isDisabled ? `disabled` : ``}>
-        <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">$${el.type.charAt(0).toUpperCase() + el.type.slice(1)}</label>
+        <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type.charAt(0).toUpperCase() + el.type.slice(1)}</label>
       </div>`);
     });
 
     return pointTypesList.join(``);
-  }
+  };
 
   const createDestinationsListTemplate = () => {
     const destinationsList = [];
@@ -35,9 +35,9 @@ export const createNewEventFormTemplate = (data, offers, destinations) => {
     });
 
     return destinationsList.join(``);
-  }
+  };
 
-  const createPointOffersTemplate = (isDisabled) => {
+  const createPointOffersTemplate = () => {
     if (pointType.offers !== null && pointType.offers.length !== 0) {
       const offersList = [];
 

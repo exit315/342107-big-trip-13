@@ -9,7 +9,7 @@ export default class PointNew {
 
     this._eventCreateComponent = null;
     this._destroyCallback = null;
-    
+
     this._submitFormHandler = this._submitFormHandler.bind(this);
     this._escDownHandler = this._escDownHandler.bind(this);
     this._canselClickHandler = this._canselClickHandler.bind(this);

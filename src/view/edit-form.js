@@ -7,7 +7,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 const createEditEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price, isDisabled, isSaving, isDeleting} = data;
 
-  const createPointTypesListTemplate = (isDisabled) => {
+  const createPointTypesListTemplate = () => {
     const pointTypesList = [];
     offers.forEach((el) => {
       pointTypesList.push(`<div class="event__type-item">
@@ -17,7 +17,7 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
     });
 
     return pointTypesList.join(``);
-  }
+  };
 
   const createDestinationsListTemplate = () => {
     const destinationsList = [];
@@ -26,9 +26,9 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
     });
 
     return destinationsList.join(``);
-  }
+  };
 
-  const createPointOffersTemplate = (isDisabled) => {
+  const createPointOffersTemplate = () => {
     if (pointType.offers !== null && pointType.offers.length !== 0) {
       const offersList = [];
 
@@ -106,7 +106,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           ${pointType.typeOfPoint}
         </label>
         <select id="destination-list" class="event__input  event__input--destination" name="event-destination">
-          <option>${destination.title}</option>
           ${destinationsListTemplate}
         </select>
       </div>
@@ -255,14 +254,14 @@ export default class EditEventPoint extends SmartView {
           this._data.pointType,
           {offers: this._data.pointType.offers}
       )
-    });
+    }, true);
   }
 
   _changePointPriceHandler(evt) {
     evt.preventDefault();
 
     this.updateData({
-      price: evt.target.value
+      price: Number(evt.target.value)
     }, true);
   }
 
@@ -351,7 +350,7 @@ export default class EditEventPoint extends SmartView {
 
   static parseDataToEvent(data) {
     data = Object.assign({}, data);
-    
+
     delete data.isDisabled;
     delete data.isSaving;
     delete data.isDeleting;

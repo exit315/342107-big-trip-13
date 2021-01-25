@@ -182,7 +182,7 @@ const renderTimeChart = (timeCtx, points) => {
   for (let i = 0; i < uniqPointTypes.length; i++) {
     timeForPoints.push(points.reduce((newArr, point)=> {
       if (point.pointType.typeOfPoint === uniqPointTypes[i].toLowerCase()) {
-        let duration = generateDuration(dayjs(point.dateBegin), dayjs(point.dateEnd))
+        let duration = generateDuration(dayjs(point.dateBegin), dayjs(point.dateEnd));
         newArr.push(duration);
       }
       return newArr;
@@ -193,7 +193,7 @@ const renderTimeChart = (timeCtx, points) => {
 
   const timeChart = [];
   timeSum.forEach((time) => {
-    
+
     const daysDuration = moment.duration(time);
     const days = daysDuration._data.days;
 
