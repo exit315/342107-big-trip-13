@@ -79,3 +79,7 @@ export const calcSum = (arr) => {
 
   return sumArr;
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

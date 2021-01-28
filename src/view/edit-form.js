@@ -38,7 +38,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
       let i = 1;
       const currentOffers = pointType.offers;
 
-
       generalOffersList.offers.forEach((el) => {
         let checkedOfferIndex = currentOffers.findIndex((currentOffer) => currentOffer.title === el.title);
 

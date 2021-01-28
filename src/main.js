@@ -1,5 +1,7 @@
 import {render, RenderPosition, remove} from "./utils/render.js";
 import {MenuItem, UpdateType, FilterType} from "./utils/const.js";
+import {isOnline} from "./utils/utils.js";
+import {toast} from "./utils/toast/toast.js";
 import SiteMenuView from "./view/site-menu.js";
 import TripInfoView from "./view/trip-info.js";
 import AddNewPointBtnView from "./view/add-point-btn.js";
@@ -10,11 +12,19 @@ import DestinationsModel from "./model/destinations.js";
 import TripPresenter from "./presenter/trip.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticsView from "./view/statistics.js";
-import Api from "./api.js";
+import Api from "./api/api.js";
+import Store from "./api/store.js";
+import Provider from "./api/provider.js";
 
 const AUTHORIZATION = `Basic jhykf545ghtxaqmlpz7545s5i`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const STORE_PREFIX = `bigtrip-localstorage`;
+const STORE_VER = `v13`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
 const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 let statisticsComponent = null;
 
@@ -33,7 +43,7 @@ const tripInfo = new TripInfoView();
 const addNewPointBtn = new AddNewPointBtnView();
 const siteMenu = new SiteMenuView();
 const filterPresenter = new FilterPresenter(siteMenuControls, filterModel);
-const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, offersModel, destinationsModel, api);
+const tripPresenter = new TripPresenter(eventsComponent, pointsModel, filterModel, offersModel, destinationsModel, apiWithProvider);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -64,9 +74,14 @@ const handleNewPointFormOpen = () => {
   tripPresenter.destroy();
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   tripPresenter.init();
-  tripPresenter.createPoint(handleNewPointFormClose);
-  siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = true;
-  siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
+  if (!isOnline()) {
+    toast(`You can't create new point offline`);
+    return;
+  } else {
+    tripPresenter.createPoint(handleNewPointFormClose);
+    siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).disabled = true;
+    siteMenu.getElement().querySelector(`.${MenuItem.TABLE.toLowerCase()}`).classList.add(`trip-tabs__btn--active`);
+  }
 };
 
 tripPresenter.init();
@@ -77,17 +92,7 @@ render(siteMenuWrapper, addNewPointBtn, RenderPosition.BEFOREEND);
 
 siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, handleNewPointFormOpen);
 
-api.getDestinations()
-  .then((destinations) => {
-    destinationsModel.setDestinations(UpdateType.MINOR, destinations);
-  });
-
-api.getOffers()
-  .then((offers) => {
-    offersModel.setOffers(UpdateType.MINOR, offers);
-  });
-
-api.getPoints()
+apiWithProvider.getPoints()
   .then((points) => {
     pointsModel.setPoints(UpdateType.INIT, points);
     render(siteMenuControls, siteMenu, RenderPosition.AFTERBEGIN);
@@ -99,4 +104,25 @@ api.getPoints()
     siteMenu.setMenuClickHandler(handleSiteMenuClick);
   });
 
+api.getDestinations()
+  .then((destinations) => {
+    destinationsModel.setDestinations(UpdateType.MINOR, destinations);
+  });
 
+api.getOffers()
+  .then((offers) => {
+    offersModel.setOffers(UpdateType.MINOR, offers);
+  });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
