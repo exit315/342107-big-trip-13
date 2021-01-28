@@ -77,6 +77,16 @@ render(siteMenuWrapper, addNewPointBtn, RenderPosition.BEFOREEND);
 
 siteMenuWrapper.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, handleNewPointFormOpen);
 
+api.getDestinations()
+  .then((destinations) => {
+    destinationsModel.setDestinations(UpdateType.MINOR, destinations);
+  });
+
+api.getOffers()
+  .then((offers) => {
+    offersModel.setOffers(UpdateType.MINOR, offers);
+  });
+
 api.getPoints()
   .then((points) => {
     pointsModel.setPoints(UpdateType.INIT, points);
@@ -89,12 +99,4 @@ api.getPoints()
     siteMenu.setMenuClickHandler(handleSiteMenuClick);
   });
 
-api.getDestinations()
-  .then((destinations) => {
-    destinationsModel.setDestinations(UpdateType.MINOR, destinations);
-  });
 
-api.getOffers()
-  .then((offers) => {
-    offersModel.setOffers(UpdateType.MINOR, offers);
-  });
