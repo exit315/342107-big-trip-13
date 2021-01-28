@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
+import {toast} from "../utils/toast/toast.js";
 import SmartView from "./smart.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -11,7 +12,7 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
     const pointTypesList = [];
     offers.forEach((el) => {
       pointTypesList.push(`<div class="event__type-item">
-        <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}" ${isDisabled ? `disabled` : ``}>
+        <input id="event-type-${el.type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${el.type}" ${el.type === pointType.typeOfPoint ? `checked` : ``} ${isDisabled ? `disabled` : ``}>
         <label class="event__type-label  event__type-label--${el.type}" for="event-type-${el.type}">${el.type.charAt(0).toUpperCase() + el.type.slice(1)}</label>
       </div>`);
     });
@@ -29,20 +30,26 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
   };
 
   const createPointOffersTemplate = () => {
-    if (pointType.offers !== null && pointType.offers.length !== 0) {
+    const generalOffersList = offers.find((el) => el.type === pointType.typeOfPoint);
+
+    if (generalOffersList.offers !== null && generalOffersList.offers.length !== 0) {
       const offersList = [];
 
       let i = 1;
+      const currentOffers = pointType.offers;
 
-      pointType.offers.forEach((el) => {
+
+      generalOffersList.offers.forEach((el) => {
+        let checkedOfferIndex = currentOffers.findIndex((currentOffer) => currentOffer.title === el.title);
+
         offersList.push(`<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointType.typeOfPoint + i}" type="checkbox" name="event-offer-${pointType.typeOfPoint + i}" ${el.isChecked ? `checked` : ``} ${data.isDisabled ? `disabled` : ``}>
-          <label class="event__offer-label" for="event-offer-${pointType.typeOfPoint + i}">
+          <input class="event__offer-checkbox visually-hidden" id="event-offer-${generalOffersList.type}${i}" type="checkbox" name="event-offer-${generalOffersList.type}${i}" ${checkedOfferIndex !== -1 ? `checked` : ``} ${data.isDisabled ? `disabled` : ``}>
+          <label class="event__offer-label" for="event-offer-${generalOffersList.type}${i}">
             <span class="event__offer-title">${el.title}</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">${el.price}</span>
-          </label>
-        </div>`);
+          <span class="event__offer-price">${el.price}</span>
+        </label>
+      </div>`);
         i++;
       });
 
@@ -79,9 +86,9 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
     }
   };
 
-  const pointTypesListTemplate = createPointTypesListTemplate(isDisabled);
+  const pointTypesListTemplate = createPointTypesListTemplate();
   const destinationsListTemplate = createDestinationsListTemplate();
-  const pointOffersTemplate = createPointOffersTemplate(pointType, isDisabled);
+  const pointOffersTemplate = createPointOffersTemplate(pointType);
   const pointDestinationDescriptionTemplate = createPointDestinationDescriptionTemplate(destination);
 
   return `<form class="event event--edit" action="#" method="post">
@@ -123,11 +130,11 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" value="${price}" ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" min="0" value="${price}" ${isDisabled ? `disabled` : ``}>
       </div>
 
-      <button class="event__save-btn btn btn--blue" type="submit">${isSaving ? `Saving...` : `Save`}</button>
-      <button class="event__reset-btn" type="reset">${isDeleting ? `Deleting...` : `Delete`}</button>
+      <button class="event__save-btn btn btn--blue" type="submit" ${isSaving ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
+      <button class="event__reset-btn" type="reset" ${isDeleting ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
@@ -143,7 +150,8 @@ export default class EditEventPoint extends SmartView {
   constructor(eventPoint, offers, destinations) {
     super();
     this._data = EditEventPoint.parseEventToData(eventPoint);
-    this._datepicker = null;
+    this._datepickerStart = null;
+    this._datepickerEnd = null;
 
     this._offers = offers;
     this._destinations = destinations;
@@ -165,9 +173,14 @@ export default class EditEventPoint extends SmartView {
   removeElement() {
     super.removeElement();
 
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
     }
   }
 
@@ -214,12 +227,11 @@ export default class EditEventPoint extends SmartView {
   _changePointTypeHandler(evt) {
     evt.preventDefault();
 
-    let i = this._offers.findIndex((el) => el.type === evt.target.value);
     this.updateData({
       pointType: Object.assign(
           {},
           {typeOfPoint: evt.target.value},
-          {offers: this._offers[i].offers}
+          {offers: []}
       )
     });
   }
@@ -242,17 +254,29 @@ export default class EditEventPoint extends SmartView {
   _changePointOfferHandler(evt) {
     evt.preventDefault();
 
-    let offerTitle = evt.target.parentElement.querySelector(`.event__offer-title`).textContent;
+    const offerTitle = evt.target.parentElement.querySelector(`.event__offer-title`).textContent;
 
-    let i = this._data.pointType.offers.findIndex((el) => el.title === offerTitle);
+    const checkedOffers = this._data.pointType.offers;
 
-    this._data.pointType.offers[i].isChecked = evt.target.checked;
+    const currentOffers = this._offers.find((offer) => offer.type === this._data.pointType.typeOfPoint);
+
+    const i = currentOffers.offers.findIndex((el) => el.title === offerTitle);
+
+    if (i !== -1) {
+      let j = checkedOffers.findIndex((el) => el.title === offerTitle);
+
+      if (j === -1) {
+        checkedOffers.push(currentOffers.offers[i]);
+      } else {
+        checkedOffers.splice(j, 1);
+      }
+    }
 
     this.updateData({
       pointType: Object.assign(
           {},
           this._data.pointType,
-          {offers: this._data.pointType.offers}
+          {offers: checkedOffers}
       )
     }, true);
   }
@@ -277,29 +301,37 @@ export default class EditEventPoint extends SmartView {
   _submitFormHandler(evt) {
     evt.preventDefault();
 
+    if (this._data.dateBegin > this._data.dateEnd) {
+      toast(`End date can't be less than start date`);
+      return;
+    }
+
     this._callback.submitClick(EditEventPoint.parseDataToEvent(this._data));
   }
 
   _setDatepicker() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
     }
 
-    this._datepicker = flatpickr(
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
+
+    this._datepickerStart = flatpickr(
         this.getElement().querySelector(`.event__input--start-time`),
         {
-          minDate: `today`,
           enableTime: true,
           dateFormat: `d/m/y H:i`,
           onChange: this._changeDateEventBeginHandler
         }
     );
 
-    this._datepicker = flatpickr(
+    this._datepickerEnd = flatpickr(
         this.getElement().querySelector(`.event__input--end-time`),
         {
-          minDate: `today`,
           enableTime: true,
           dateFormat: `d/m/y H:i`,
           onChange: this._changeDateEventEndHandler
