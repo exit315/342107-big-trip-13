@@ -38,7 +38,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
       let i = 1;
       const currentOffers = pointType.offers;
 
-
       generalOffersList.offers.forEach((el) => {
         let checkedOfferIndex = currentOffers.findIndex((currentOffer) => currentOffer.title === el.title);
 
@@ -99,7 +98,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           <img class="event__type-icon" width="17" height="17" src="img/icons/${pointType.typeOfPoint}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle" type="checkbox" ${isDisabled ? `disabled` : ``}>
-
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
@@ -107,7 +105,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           </fieldset>
         </div>
       </div>
-
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination">
           ${pointType.typeOfPoint}
@@ -116,7 +113,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
           ${destinationsListTemplate}
         </select>
       </div>
-
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
         <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}" ${isDisabled ? `disabled` : ``}>
@@ -124,7 +120,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
         <label class="visually-hidden" for="event-end-time">To</label>
         <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}" ${isDisabled ? `disabled` : ``}>
       </div>
-
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price">
           <span class="visually-hidden">Price</span>
@@ -132,7 +127,6 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
         </label>
         <input class="event__input  event__input--price" id="event-price" type="number" name="event-price" min="0" value="${price}" ${isDisabled ? `disabled` : ``}>
       </div>
-
       <button class="event__save-btn btn btn--blue" type="submit" ${isSaving ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
       <button class="event__reset-btn" type="reset" ${isDeleting ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
       <button class="event__rollup-btn" type="button">
@@ -256,7 +250,7 @@ export default class EditEventPoint extends SmartView {
 
     const offerTitle = evt.target.parentElement.querySelector(`.event__offer-title`).textContent;
 
-    const checkedOffers = this._data.pointType.offers;
+    const checkedOffers = this._data.pointType.offers.slice().map((el) => Object.assign({}, el));
 
     const currentOffers = this._offers.find((offer) => offer.type === this._data.pointType.typeOfPoint);
 
