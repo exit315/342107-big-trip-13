@@ -41,15 +41,17 @@ export const createNewEventFormTemplate = (data, offers, destinations) => {
   const createPointOffersTemplate = () => {
     const generalOffersList = offers.find((el) => el.type === pointType.typeOfPoint);
 
-
     if (generalOffersList.offers !== null && generalOffersList.offers.length !== 0) {
       const offersList = [];
 
       let i = 1;
+      const currentOffers = pointType.offers;
 
       generalOffersList.offers.forEach((el) => {
+        let checkedOfferIndex = currentOffers.findIndex((currentOffer) => currentOffer.title === el.title);
+
         offersList.push(`<div class="event__offer-selector">
-          <input class="event__offer-checkbox visually-hidden" id="event-offer-${generalOffersList.type}${i}" type="checkbox" name="event-offer-${generalOffersList.type}${i}" ${data.isDisabled ? `disabled` : ``}>
+          <input class="event__offer-checkbox visually-hidden" id="event-offer-${generalOffersList.type}${i}" type="checkbox" name="event-offer-${generalOffersList.type}${i}" ${checkedOfferIndex !== -1 ? `checked` : ``} ${data.isDisabled ? `disabled` : ``}>
           <label class="event__offer-label" for="event-offer-${generalOffersList.type}${i}">
             <span class="event__offer-title">${el.title}</span>
             &plus;&euro;&nbsp;
