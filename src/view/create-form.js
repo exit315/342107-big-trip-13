@@ -14,7 +14,7 @@ const NEW_EVENT_POINT = {
   isFavorite: false
 };
 
-export const createNewEventFormTemplate = (data, offers, destinations) => {
+const createNewEventFormTemplate = (data, offers, destinations) => {
   const {pointType, destination, dateBegin, dateEnd, price, isDisabled, isSaving} = data;
 
   const createPointTypesListTemplate = () => {
@@ -161,14 +161,14 @@ export default class CreateEventPoint extends SmartView {
     this._offers = offers;
     this._destinations = destinations;
 
-    this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
-    this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
-    this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
-    this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
-    this._changePointOfferHandler = this._changePointOfferHandler.bind(this);
-    this._changePointPriceHandler = this._changePointPriceHandler.bind(this);
-    this._submitFormHandler = this._submitFormHandler.bind(this);
-    this._canselClickHandler = this._canselClickHandler.bind(this);
+    this._handleDateEventBeginChange = this._handleDateEventBeginChange.bind(this);
+    this._handleDateEventEndChange = this._handleDateEventEndChange.bind(this);
+    this._handlePointTypeChange = this._handlePointTypeChange.bind(this);
+    this._handlePointDestinationChange = this._handlePointDestinationChange.bind(this);
+    this._handlePointOfferChange = this._handlePointOfferChange.bind(this);
+    this._handlePointPriceChange = this._handlePointPriceChange.bind(this);
+    this._handleSubmitForm = this._handleSubmitForm.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -187,34 +187,34 @@ export default class CreateEventPoint extends SmartView {
   _setInnerHandlers() {
     this.getElement()
     .querySelectorAll(`.event__type-input`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointTypeHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointTypeChange));
 
     this.getElement()
     .querySelectorAll(`.event__input--destination`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointDestinationHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointDestinationChange));
 
     this.getElement()
     .querySelectorAll(`.event__offer-checkbox`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointOfferHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointOfferChange));
 
     this.getElement()
     .querySelectorAll(`.event__input--price`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointPriceHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointPriceChange));
   }
 
-  _changeDateEventBeginHandler([userDate]) {
+  _handleDateEventBeginChange([userDate]) {
     this.updateData({
       dateBegin: userDate
     }, true);
   }
 
-  _changeDateEventEndHandler([userDate]) {
+  _handleDateEventEndChange([userDate]) {
     this.updateData({
       dateEnd: userDate
     }, true);
   }
 
-  _changePointTypeHandler(evt) {
+  _handlePointTypeChange(evt) {
     evt.preventDefault();
 
     this.updateData({
@@ -226,7 +226,7 @@ export default class CreateEventPoint extends SmartView {
     });
   }
 
-  _changePointDestinationHandler(evt) {
+  _handlePointDestinationChange(evt) {
     evt.preventDefault();
 
     let selectedValue = evt.target.options[evt.target.selectedIndex].value;
@@ -242,12 +242,12 @@ export default class CreateEventPoint extends SmartView {
     });
   }
 
-  _changePointOfferHandler(evt) {
+  _handlePointOfferChange(evt) {
     evt.preventDefault();
 
     const offerTitle = evt.target.parentElement.querySelector(`.event__offer-title`).textContent;
 
-    const checkedOffers = this._data.pointType.offers;
+    const checkedOffers = this._data.pointType.offers.slice().map((el) => Object.assign({}, el));
 
     const currentOffers = this._offers.find((offer) => offer.type === this._data.pointType.typeOfPoint);
 
@@ -272,7 +272,7 @@ export default class CreateEventPoint extends SmartView {
     }, true);
   }
 
-  _changePointPriceHandler(evt) {
+  _handlePointPriceChange(evt) {
     evt.preventDefault();
 
     this.updateData({
@@ -280,13 +280,13 @@ export default class CreateEventPoint extends SmartView {
     }, true);
   }
 
-  _canselClickHandler(evt) {
+  _handleDeleteClick(evt) {
     evt.preventDefault();
     this._callback.canselClick(CreateEventPoint.parseDataToEvent(this._data));
     document.querySelector(`.trip-main__event-add-btn`).disabled = false;
   }
 
-  _submitFormHandler(evt) {
+  _handleSubmitForm(evt) {
     evt.preventDefault();
 
     if (this._data.dateBegin > this._data.dateEnd) {
@@ -308,7 +308,7 @@ export default class CreateEventPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `d/m/y H:i`,
-          onChange: this._changeDateEventBeginHandler
+          onChange: this._handleDateEventBeginChange
         }
     );
 
@@ -317,7 +317,7 @@ export default class CreateEventPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `d/m/y H:i`,
-          onChange: this._changeDateEventEndHandler
+          onChange: this._handleDateEventEndChange
         }
     );
   }
@@ -326,13 +326,13 @@ export default class CreateEventPoint extends SmartView {
     this._callback.canselClick = callback;
     this.getElement()
     .querySelector(`.event__reset-btn`)
-    .addEventListener(`click`, this._canselClickHandler);
+    .addEventListener(`click`, this._handleDeleteClick);
   }
 
   setSubmitFormHandler(callback) {
     this._callback.submitClick = callback;
     this.getElement()
-    .addEventListener(`submit`, this._submitFormHandler);
+    .addEventListener(`submit`, this._handleSubmitForm);
   }
 
   restoreHandlers() {

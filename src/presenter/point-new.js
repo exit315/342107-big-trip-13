@@ -10,9 +10,9 @@ export default class PointNew {
     this._eventCreateComponent = null;
     this._destroyCallback = null;
 
-    this._submitFormHandler = this._submitFormHandler.bind(this);
-    this._escDownHandler = this._escDownHandler.bind(this);
-    this._canselClickHandler = this._canselClickHandler.bind(this);
+    this._handleSubmitForm = this._handleSubmitForm.bind(this);
+    this._handleEscDownPress = this._handleEscDownPress.bind(this);
+    this._handleCanselClick = this._handleCanselClick.bind(this);
   }
 
   init(callback, offers, destinations) {
@@ -23,12 +23,12 @@ export default class PointNew {
     }
 
     this._eventCreateComponent = new PointNewView(undefined, offers, destinations);
-    this._eventCreateComponent.setSubmitFormHandler(this._submitFormHandler);
-    this._eventCreateComponent.setCanselClickHandler(this._canselClickHandler);
+    this._eventCreateComponent.setSubmitFormHandler(this._handleSubmitForm);
+    this._eventCreateComponent.setCanselClickHandler(this._handleCanselClick);
 
     render(this._eventsListComponent, this._eventCreateComponent, RenderPosition.AFTERBEGIN);
 
-    document.addEventListener(`keydown`, this._escDownHandler);
+    document.addEventListener(`keydown`, this._handleEscDownPress);
   }
 
   destroy() {
@@ -43,7 +43,7 @@ export default class PointNew {
     remove(this._eventCreateComponent);
     this._eventCreateComponent = null;
 
-    document.removeEventListener(`keydown`, this._escDownHandler);
+    document.removeEventListener(`keydown`, this._handleEscDownPress);
   }
 
   setSaving() {
@@ -64,18 +64,18 @@ export default class PointNew {
     this._eventCreateComponent.shake(resetFormState);
   }
 
-  _escDownHandler(evt) {
+  _handleEscDownPress(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this.destroy();
     }
   }
 
-  _canselClickHandler() {
+  _handleCanselClick() {
     this.destroy();
   }
 
-  _submitFormHandler(eventPoint) {
+  _handleSubmitForm(eventPoint) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,

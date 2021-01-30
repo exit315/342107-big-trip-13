@@ -13,12 +13,12 @@ export default class Point {
     this._eventEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._clickHandler = this._clickHandler.bind(this);
-    this._submitFormHandler = this._submitFormHandler.bind(this);
-    this._editClickHandler = this._editClickHandler.bind(this);
-    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-    this._escDownHandler = this._escDownHandler.bind(this);
-    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+    this._handleExitEditClick = this._handleExitEditClick.bind(this);
+    this._handleSubmitForm = this._handleSubmitForm.bind(this);
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleEscDownPress = this._handleEscDownPress.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(eventPoint, offers, destinations) {
@@ -29,11 +29,11 @@ export default class Point {
     this._eventComponent = new EventPointView(eventPoint);
     this._eventEditComponent = new EditEventPointView(eventPoint, offers, destinations);
 
-    this._eventComponent.setEditClickHandler(this._editClickHandler);
-    this._eventEditComponent.setClickHandler(this._clickHandler);
-    this._eventEditComponent.setSubmitFormHandler(this._submitFormHandler);
-    this._eventEditComponent.setDeleteClickHandler(this._deleteClickHandler);
-    this._eventComponent.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._eventComponent.setEditClickHandler(this._handleEditClick);
+    this._eventEditComponent.setClickHandler(this._handleExitEditClick);
+    this._eventEditComponent.setSubmitFormHandler(this._handleSubmitForm);
+    this._eventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._eventsListComponent, this._eventComponent, RenderPosition.BEFOREEND);
@@ -95,27 +95,27 @@ export default class Point {
 
   _replaceCardToForm() {
     replace(this._eventEditComponent, this._eventComponent);
-    document.addEventListener(`keydown`, this._escDownHandler);
+    document.addEventListener(`keydown`, this._handleEscDownPress);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._eventComponent, this._eventEditComponent);
-    document.removeEventListener(`keydown`, this._escDownHandler);
+    document.removeEventListener(`keydown`, this._handleEscDownPress);
     this._mode = Mode.DEFAULT;
   }
 
-  _clickHandler() {
+  _handleExitEditClick() {
     this._eventEditComponent.reset(this._eventPoint);
     this._replaceFormToCard();
   }
 
-  _editClickHandler() {
+  _handleEditClick() {
     this._replaceCardToForm();
   }
 
-  _escDownHandler(evt) {
+  _handleEscDownPress(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._eventEditComponent.reset(this._eventPoint);
@@ -123,7 +123,7 @@ export default class Point {
     }
   }
 
-  _favoriteClickHandler() {
+  _handleFavoriteClick() {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
@@ -137,7 +137,7 @@ export default class Point {
     );
   }
 
-  _deleteClickHandler(eventPoint) {
+  _handleDeleteClick(eventPoint) {
     this._changeData(
         UserAction.DELETE_POINT,
         UpdateType.MINOR,
@@ -145,7 +145,7 @@ export default class Point {
     );
   }
 
-  _submitFormHandler(eventPoint) {
+  _handleSubmitForm(eventPoint) {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,

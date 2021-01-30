@@ -12,20 +12,20 @@ export default class SiteMenu extends AbstractView {
   constructor() {
     super();
 
-    this._menuClickHandler = this._menuClickHandler.bind(this);
+    this._handleMenuClick = this._handleMenuClick.bind(this);
   }
 
   getTemplate() {
     return createMainMenu();
   }
 
-  _menuClickHandler(evt) {
+  _handleMenuClick(evt) {
     evt.preventDefault();
     this._callback.menuClick(evt.target.dataset.menuItem);
   }
 
   setMenuClickHandler(callback) {
     this._callback.menuClick = callback;
-    this.getElement().addEventListener(`click`, this._menuClickHandler);
+    this.getElement().addEventListener(`click`, this._handleMenuClick);
   }
 }

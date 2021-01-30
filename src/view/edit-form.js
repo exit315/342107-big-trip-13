@@ -150,15 +150,15 @@ export default class EditEventPoint extends SmartView {
     this._offers = offers;
     this._destinations = destinations;
 
-    this._changeDateEventBeginHandler = this._changeDateEventBeginHandler.bind(this);
-    this._changeDateEventEndHandler = this._changeDateEventEndHandler.bind(this);
-    this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
-    this._changePointDestinationHandler = this._changePointDestinationHandler.bind(this);
-    this._changePointOfferHandler = this._changePointOfferHandler.bind(this);
-    this._changePointPriceHandler = this._changePointPriceHandler.bind(this);
-    this._clickHandler = this._clickHandler.bind(this);
-    this._submitFormHandler = this._submitFormHandler.bind(this);
-    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+    this._handleDateEventBeginChange = this._handleDateEventBeginChange.bind(this);
+    this._handleDateEventEndChange = this._handleDateEventEndChange.bind(this);
+    this._handlePointTypeChange = this._handlePointTypeChange.bind(this);
+    this._handlePointDestinationChange = this._handlePointDestinationChange.bind(this);
+    this._handlePointOfferChange = this._handlePointOfferChange.bind(this);
+    this._handlePointPriceChange = this._handlePointPriceChange.bind(this);
+    this._handleExitEditClick = this._handleExitEditClick.bind(this);
+    this._handleSubmitForm = this._handleSubmitForm.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -191,34 +191,34 @@ export default class EditEventPoint extends SmartView {
   _setInnerHandlers() {
     this.getElement()
     .querySelectorAll(`.event__type-input`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointTypeHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointTypeChange));
 
     this.getElement()
     .querySelectorAll(`.event__input--destination`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointDestinationHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointDestinationChange));
 
     this.getElement()
     .querySelectorAll(`.event__offer-checkbox`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointOfferHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointOfferChange));
 
     this.getElement()
     .querySelectorAll(`.event__input--price`)
-    .forEach((el) => el.addEventListener(`change`, this._changePointPriceHandler));
+    .forEach((el) => el.addEventListener(`change`, this._handlePointPriceChange));
   }
 
-  _changeDateEventBeginHandler([userDate]) {
+  _handleDateEventBeginChange([userDate]) {
     this.updateData({
       dateBegin: userDate
     }, true);
   }
 
-  _changeDateEventEndHandler([userDate]) {
+  _handleDateEventEndChange([userDate]) {
     this.updateData({
       dateEnd: userDate
     }, true);
   }
 
-  _changePointTypeHandler(evt) {
+  _handlePointTypeChange(evt) {
     evt.preventDefault();
 
     this.updateData({
@@ -230,7 +230,7 @@ export default class EditEventPoint extends SmartView {
     });
   }
 
-  _changePointDestinationHandler(evt) {
+  _handlePointDestinationChange(evt) {
     evt.preventDefault();
 
     let i = this._destinations.findIndex((el) => el.name === evt.target.value);
@@ -245,7 +245,7 @@ export default class EditEventPoint extends SmartView {
     });
   }
 
-  _changePointOfferHandler(evt) {
+  _handlePointOfferChange(evt) {
     evt.preventDefault();
 
     const offerTitle = evt.target.parentElement.querySelector(`.event__offer-title`).textContent;
@@ -275,7 +275,7 @@ export default class EditEventPoint extends SmartView {
     }, true);
   }
 
-  _changePointPriceHandler(evt) {
+  _handlePointPriceChange(evt) {
     evt.preventDefault();
 
     this.updateData({
@@ -283,16 +283,16 @@ export default class EditEventPoint extends SmartView {
     }, true);
   }
 
-  _clickHandler() {
+  _handleExitEditClick() {
     this._callback.click();
   }
 
-  _deleteClickHandler(evt) {
+  _handleDeleteClick(evt) {
     evt.preventDefault();
     this._callback.deleteClick(EditEventPoint.parseDataToEvent(this._data));
   }
 
-  _submitFormHandler(evt) {
+  _handleSubmitForm(evt) {
     evt.preventDefault();
 
     if (this._data.dateBegin > this._data.dateEnd) {
@@ -319,7 +319,7 @@ export default class EditEventPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `d/m/y H:i`,
-          onChange: this._changeDateEventBeginHandler
+          onChange: this._handleDateEventBeginChange
         }
     );
 
@@ -328,7 +328,7 @@ export default class EditEventPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `d/m/y H:i`,
-          onChange: this._changeDateEventEndHandler
+          onChange: this._handleDateEventEndChange
         }
     );
   }
@@ -337,20 +337,20 @@ export default class EditEventPoint extends SmartView {
     this._callback.click = callback;
     this.getElement()
     .querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, this._clickHandler);
+    .addEventListener(`click`, this._handleExitEditClick);
   }
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement()
     .querySelector(`.event__reset-btn`)
-    .addEventListener(`click`, this._deleteClickHandler);
+    .addEventListener(`click`, this._handleDeleteClick);
   }
 
   setSubmitFormHandler(callback) {
     this._callback.submitClick = callback;
     this.getElement()
-    .addEventListener(`submit`, this._submitFormHandler);
+    .addEventListener(`submit`, this._handleSubmitForm);
   }
 
   restoreHandlers() {
