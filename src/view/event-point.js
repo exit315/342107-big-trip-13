@@ -6,9 +6,6 @@ import AbstractView from "./abstract.js";
 const createEventPointTemplate = (eventPoint) => {
   const {pointType, destination, dateEnd, dateBegin, isFavorite, price} = eventPoint;
 
-  const timeBegin = dayjs(dateBegin).format(`HH:MM`);
-  const timeEnd = dayjs(dateEnd).format(`HH:MM`);
-
   const offersList = [];
   if (pointType.offers !== null) {
     pointType.offers.forEach((el) => {
@@ -27,15 +24,17 @@ const createEventPointTemplate = (eventPoint) => {
     const hours = eventDuration._data.hours;
     const minutes = eventDuration._data.minutes;
 
-    if (days === 0) {
-      return `${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
-      ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
-    } else if (days === 0 && hours === 0) {
-      return `${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
-    } else {
+    if (days !== 0 && hours !== 0 && minutes !== 0) {
       return `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
       ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
       ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else if (days === 0 && hours !== 0 && minutes !== 0) {
+      return `${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
+      ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else if (days === 0 && hours === 0 && minutes !== 0) {
+      return `${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else {
+      return `00M`;
     }
   };
 
@@ -50,9 +49,9 @@ const createEventPointTemplate = (eventPoint) => {
       <h3 class="event__title">${pointType.typeOfPoint} ${destination.title}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time">${timeBegin}</time>
+          <time class="event__start-time">${dayjs(dateBegin).format(`hh:mm`)}</time>
           &mdash;
-          <time class="event__end-time">${timeEnd}</time>
+          <time class="event__end-time">${dayjs(dateEnd).format(`hh:mm`)}</time>
         </p>
         <p class="event__duration">${eventDurationTemplate}</p>
       </div>

@@ -115,10 +115,10 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
       </div>
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
-        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}" ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY hh:mm`)}" ${isDisabled ? `disabled` : ``}>
         &mdash;
         <label class="visually-hidden" for="event-end-time">To</label>
-        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}" ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY hh:mm`)}" ${isDisabled ? `disabled` : ``}>
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price">
@@ -295,7 +295,7 @@ export default class EditEventPoint extends SmartView {
   _handleSubmitForm(evt) {
     evt.preventDefault();
 
-    if (this._data.dateBegin > this._data.dateEnd) {
+    if (dayjs(this._data.dateBegin).isAfter(this._data.dateEnd, `minute`)) {
       toast(`End date can't be less than start date`);
       return;
     }

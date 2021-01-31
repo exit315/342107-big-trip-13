@@ -128,10 +128,10 @@ const createNewEventFormTemplate = (data, offers, destinations) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
-        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:MM`)}"  ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY hh:mm`)}"  ${isDisabled ? `disabled` : ``}>
         &mdash;
         <label class="visually-hidden" for="event-end-time">To</label>
-        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:MM`)}"  ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY hh:mm`)}"  ${isDisabled ? `disabled` : ``}>
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -289,7 +289,7 @@ export default class CreateEventPoint extends SmartView {
   _handleSubmitForm(evt) {
     evt.preventDefault();
 
-    if (this._data.dateBegin > this._data.dateEnd) {
+    if (dayjs(this._data.dateBegin).isAfter(this._data.dateEnd, `minute`)) {
       toast(`End date can't be less than start date`);
       return;
     }
@@ -298,12 +298,17 @@ export default class CreateEventPoint extends SmartView {
   }
 
   _setDatepicker() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
     }
 
-    this._datepicker = flatpickr(
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
+
+    this._datepickerStart = flatpickr(
         this.getElement().querySelector(`.event__input--start-time`),
         {
           enableTime: true,
@@ -312,7 +317,7 @@ export default class CreateEventPoint extends SmartView {
         }
     );
 
-    this._datepicker = flatpickr(
+    this._datepickerEnd = flatpickr(
         this.getElement().querySelector(`.event__input--end-time`),
         {
           enableTime: true,
