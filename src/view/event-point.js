@@ -20,6 +20,7 @@ const createEventPointTemplate = (eventPoint) => {
 
   const createEventDurationTemplate = () => {
     const eventDuration = moment.duration(generateDuration(dayjs(dateBegin), dayjs(dateEnd)));
+
     const days = eventDuration._data.days;
     const hours = eventDuration._data.hours;
     const minutes = eventDuration._data.minutes;
@@ -49,9 +50,9 @@ const createEventPointTemplate = (eventPoint) => {
       <h3 class="event__title">${pointType.typeOfPoint} ${destination.title}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time">${dayjs(dateBegin).format(`hh:mm`)}</time>
+          <time class="event__start-time">${dayjs(dateBegin).format(`HH:mm`)}</time>
           &mdash;
-          <time class="event__end-time">${dayjs(dateEnd).format(`hh:mm`)}</time>
+          <time class="event__end-time">${dayjs(dateEnd).format(`HH:mm`)}</time>
         </p>
         <p class="event__duration">${eventDurationTemplate}</p>
       </div>
