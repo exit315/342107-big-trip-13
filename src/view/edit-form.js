@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import moment from "moment";
 import flatpickr from "flatpickr";
 import {toast} from "../utils/toast/toast.js";
 import SmartView from "./smart.js";
@@ -115,10 +116,10 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
       </div>
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time">From</label>
-        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY hh:mm`)}" ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--time event__input--start-time" id="event-start-time" type="text" name="event-start-time" value="${dayjs(dateBegin).format(`DD/MM/YY HH:mm`)}" ${isDisabled ? `disabled` : ``}>
         &mdash;
         <label class="visually-hidden" for="event-end-time">To</label>
-        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY hh:mm`)}" ${isDisabled ? `disabled` : ``}>
+        <input class="event__input  event__input--time event__input--end-time" id="event-end-time" type="text" name="event-end-time" value="${dayjs(dateEnd).format(`DD/MM/YY HH:mm`)}" ${isDisabled ? `disabled` : ``}>
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price">
@@ -295,7 +296,7 @@ export default class EditEventPoint extends SmartView {
   _handleSubmitForm(evt) {
     evt.preventDefault();
 
-    if (dayjs(this._data.dateBegin).isAfter(this._data.dateEnd, `minute`)) {
+    if (moment(this._data.dateEnd).diff(moment(this._data.dateBegin), `minutes`) < 0) {
       toast(`End date can't be less than start date`);
       return;
     }
