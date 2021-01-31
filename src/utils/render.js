@@ -24,10 +24,6 @@ export const render = (container, element, place) => {
   }
 };
 
-export const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 export const replace = (newChild, oldChild) => {
   if (newChild instanceof Abstract) {
     newChild = newChild.getElement();

@@ -4,9 +4,9 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
   const {type, name} = filter;
 
   return `<div class="trip-filters__filter">
-    <input id="filter-${name.toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${name.toLowerCase()}" ${type === currentFilterType ? `checked` : ``}>
-    <label class="trip-filters__filter-label" for="filter-${name.toLowerCase()}">${name}</label>
-  </div>`;
+            <input id="filter-${name.toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${name.toLowerCase()}" ${type === currentFilterType ? `checked` : ``}>
+            <label class="trip-filters__filter-label" for="filter-${name.toLowerCase()}">${name}</label>
+          </div>`;
 };
 
 const createFilterTemplate = (filterItems, currentFilterType) => {
@@ -26,20 +26,20 @@ export default class Filter extends AbstractView {
     this._filters = filters;
     this._currentFilter = currentFilterType;
 
-    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._changeFilterType = this._changeFilterType.bind(this);
   }
 
   getTemplate() {
     return createFilterTemplate(this._filters, this._currentFilter);
   }
 
-  _filterTypeChangeHandler(evt) {
+  _changeFilterType(evt) {
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.value);
   }
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);
+    this.getElement().addEventListener(`change`, this._changeFilterType);
   }
 }

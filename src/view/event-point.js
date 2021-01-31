@@ -1,33 +1,44 @@
 import dayjs from "dayjs";
 import moment from "moment";
-
+import {generateDuration} from "../utils/utils.js";
 import AbstractView from "./abstract.js";
 
 const createEventPointTemplate = (eventPoint) => {
-  const {pointType, destination, timeBegin, timeEnd, dateBegin, duration, isFavorite, price} = eventPoint;
+  const {pointType, destination, dateEnd, dateBegin, isFavorite, price} = eventPoint;
 
   const offersList = [];
-
   if (pointType.offers !== null) {
     pointType.offers.forEach((el) => {
-      offersList.push(`${el.isChecked ? `<li class="event__offer">
+      offersList.push(`<li class="event__offer">
       <span class="event__offer-title">${el.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${el.price}</span>
-    </li>` : ``}`);
+    </li>`);
       return offersList;
     });
   }
 
-  const eventDuration = moment.duration(duration);
+  const createEventDurationTemplate = () => {
+    const eventDuration = moment.duration(generateDuration(dayjs(dateBegin), dayjs(dateEnd)));
+    const days = eventDuration._data.days;
+    const hours = eventDuration._data.hours;
+    const minutes = eventDuration._data.minutes;
 
-  const days = eventDuration._data.days;
-  const hours = eventDuration._data.hours;
-  const minutes = eventDuration._data.minutes;
+    if (days !== 0 && hours !== 0 && minutes !== 0) {
+      return `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
+      ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
+      ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else if (days === 0 && hours !== 0 && minutes !== 0) {
+      return `${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
+      ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else if (days === 0 && hours === 0 && minutes !== 0) {
+      return `${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+    } else {
+      return `00M`;
+    }
+  };
 
-  const eventDurationTemplate = `${(days.toString().length === 1) ? `0${days}` : `${days}`}D 
-  ${(hours.toString().length === 1) ? `0${hours}` : `${hours}`}H 
-  ${(minutes.toString().length === 1) ? `0${minutes}` : `${minutes}`}M`;
+  const eventDurationTemplate = createEventDurationTemplate();
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -38,9 +49,9 @@ const createEventPointTemplate = (eventPoint) => {
       <h3 class="event__title">${pointType.typeOfPoint} ${destination.title}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time">${dayjs(timeBegin).format(`HH:MM`)}</time>
+          <time class="event__start-time">${dayjs(dateBegin).format(`hh:mm`)}</time>
           &mdash;
-          <time class="event__end-time">${dayjs(timeEnd).format(`HH:MM`)}</time>
+          <time class="event__end-time">${dayjs(dateEnd).format(`hh:mm`)}</time>
         </p>
         <p class="event__duration">${eventDurationTemplate}</p>
       </div>
@@ -68,30 +79,30 @@ export default class EventPoint extends AbstractView {
   constructor(eventPoint) {
     super();
     this._eventPoint = eventPoint;
-    this._editClickHandler = this._editClickHandler.bind(this);
-    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   getTemplate() {
     return createEventPointTemplate(this._eventPoint);
   }
 
-  _editClickHandler() {
+  _handleEditClick() {
     this._callback.editClick();
   }
 
-  _favoriteClickHandler(evt) {
+  _handleFavoriteClick(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
   }
 
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._handleEditClick);
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._handleFavoriteClick);
   }
 }
