@@ -13,7 +13,7 @@ const renderMoneyChart = (moneyCtx, points) => {
   for (let i = 0; i < uniqPointTypes.length; i++) {
     moneyForPoints.push(points.reduce((newArr, point)=> {
       if (point.pointType.typeOfPoint === uniqPointTypes[i].toLowerCase()) {
-        let moneyValue = +(point.price);
+        const moneyValue = +(point.price);
         newArr.push(moneyValue);
       }
       return newArr;
@@ -182,7 +182,7 @@ const renderTimeChart = (timeCtx, points) => {
   for (let i = 0; i < uniqPointTypes.length; i++) {
     timeForPoints.push(points.reduce((newArr, point)=> {
       if (point.pointType.typeOfPoint === uniqPointTypes[i].toLowerCase()) {
-        let duration = generateDuration(dayjs(point.dateBegin), dayjs(point.dateEnd));
+        const duration = generateDuration(dayjs(point.dateBegin), dayjs(point.dateEnd));
         newArr.push(duration);
       }
       return newArr;

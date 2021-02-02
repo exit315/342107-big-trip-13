@@ -11,8 +11,8 @@ export const sortPointPriceUp = (pointA, pointB) => {
 };
 
 export const sortPointDurationUp = (pointA, pointB) => {
-  let pointAEventDuration = moment.duration(generateDuration(dayjs(pointA.dateBegin), dayjs(pointA.dateEnd)));
-  let pointBEventDuration = moment.duration(generateDuration(dayjs(pointB.dateBegin), dayjs(pointB.dateEnd)));
+  const pointAEventDuration = moment.duration(generateDuration(dayjs(pointA.dateBegin), dayjs(pointA.dateEnd)));
+  const pointBEventDuration = moment.duration(generateDuration(dayjs(pointB.dateBegin), dayjs(pointB.dateEnd)));
 
   return pointBEventDuration - pointAEventDuration;
 };

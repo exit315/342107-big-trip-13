@@ -40,7 +40,7 @@ const createEditEventFormTemplate = (data, offers, destinations) => {
       const currentOffers = pointType.offers;
 
       generalOffersList.offers.forEach((el) => {
-        let checkedOfferIndex = currentOffers.findIndex((currentOffer) => currentOffer.title === el.title);
+        const checkedOfferIndex = currentOffers.findIndex((currentOffer) => currentOffer.title === el.title);
 
         offersList.push(`<div class="event__offer-selector">
           <input class="event__offer-checkbox visually-hidden" id="event-offer-${generalOffersList.type}${i}" type="checkbox" name="event-offer-${generalOffersList.type}${i}" ${checkedOfferIndex !== -1 ? `checked` : ``} ${data.isDisabled ? `disabled` : ``}>
@@ -234,14 +234,14 @@ export default class EditEventPoint extends SmartView {
   _handlePointDestinationChange(evt) {
     evt.preventDefault();
 
-    let i = this._destinations.findIndex((el) => el.name === evt.target.value);
+    const currentDestinationsItem = this._destinations.findIndex((el) => el.name === evt.target.value);
 
     this.updateData({
       destination: Object.assign(
           {},
           {title: evt.target.value},
-          {description: this._destinations[i].description},
-          {photos: this._destinations[i].pictures}
+          {description: this._destinations[currentDestinationsItem].description},
+          {photos: this._destinations[currentDestinationsItem].pictures}
       )
     });
   }
@@ -258,7 +258,7 @@ export default class EditEventPoint extends SmartView {
     const currentOffersItem = currentOffers.offers.findIndex((el) => el.title === offerTitle);
 
     if (currentOffersItem !== -1) {
-      let checkedOffersItem = checkedOffers.findIndex((el) => el.title === offerTitle);
+      const checkedOffersItem = checkedOffers.findIndex((el) => el.title === offerTitle);
 
       if (checkedOffersItem === -1) {
         checkedOffers.push(currentOffers.offers[currentOffersItem]);
