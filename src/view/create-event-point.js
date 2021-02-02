@@ -252,15 +252,15 @@ export default class CreateEventPoint extends SmartView {
 
     const currentOffers = this._offers.find((offer) => offer.type === this._data.pointType.typeOfPoint);
 
-    const i = currentOffers.offers.findIndex((el) => el.title === offerTitle);
+    const currentOffersItem = currentOffers.offers.findIndex((el) => el.title === offerTitle);
 
-    if (i !== -1) {
-      let j = checkedOffers.findIndex((el) => el.title === offerTitle);
+    if (currentOffersItem !== -1) {
+      let checkedOffersItem = checkedOffers.findIndex((el) => el.title === offerTitle);
 
-      if (j === -1) {
-        checkedOffers.push(currentOffers.offers[i]);
+      if (checkedOffersItem === -1) {
+        checkedOffers.push(currentOffers.offers[currentOffersItem]);
       } else {
-        checkedOffers.splice(j, 1);
+        checkedOffers.splice(checkedOffersItem, 1);
       }
     }
 

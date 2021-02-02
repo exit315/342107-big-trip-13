@@ -1,6 +1,6 @@
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/const.js";
-import PointNewView from "../view/create-form.js";
+import PointNewView from "../view/create-event-point.js";
 
 export default class PointNew {
   constructor(eventsListComponent, changeData) {

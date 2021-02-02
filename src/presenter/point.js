@@ -1,6 +1,6 @@
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {Mode, UserAction, UpdateType, State} from "../utils/const.js";
-import EditEventPointView from "../view/edit-form.js";
+import EditEventPointView from "../view/edit-event-point.js";
 import EventPointView from "../view/event-point.js";
 
 export default class Point {

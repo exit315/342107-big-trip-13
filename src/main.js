@@ -1,7 +1,7 @@
 import {render, RenderPosition, remove} from "./utils/render.js";
 import {UpdateType, FilterType} from "./utils/const.js";
 import SiteMenuView from "./view/site-menu.js";
-import AddNewPointBtnView from "./view/add-point-btn.js";
+import AddNewPointBtnView from "./view/add-new-point-btn.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import OffersModel from "./model/offers.js";
